@@ -1,0 +1,964 @@
+/* src/Login.css */
+.login-background {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* Remova a linha abaixo se estiver definida */
+  /* background-image: url('https://i.ibb.co/1mrjT38/Design-sem-nome-2.png'); */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+
+
+.logo-img {
+  max-width: 100px;
+  max-height: 100px;
+  border-radius: 10px;
+  animation: scaleAnimation 1s ease-out; /* Aplica a animação */
+}
+
+.logo-container {
+  background-color: white; /* Fundo branco */
+  padding: 20px; /* Espaçamento interno */
+  border-radius: 10px; /* Borda arredondada */
+  display: inline-block; /* Permite que o padding funcione corretamente */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Sombra opcional para dar destaque */
+  margin-bottom: 20px; /* Espaçamento inferior */
+}
+
+.login-instruction {
+  color: white;
+  margin-bottom: 40px; /* Aumenta a margem inferior para afastar mais do campo de entrada */
+  text-align: center;
+}
+
+.login-container {
+  background-color: rgba(0, 0, 0, 0.4); /* Fundo translúcido */
+  padding: 30px; /* Aumenta o padding para mais espaço interno */
+  border-radius: 10px;
+  width: 100%;
+  max-width: 400px; /* Aumenta a largura máxima do container */
+}
+
+
+.login-input {
+  width: 90%; /* Ajusta a largura */
+  margin-top: 10px;
+  margin-bottom: 20px;
+  background-color: rgba(255, 255, 255, 0.3); /* Fundo translúcido */
+  color: white;
+  border-radius: 5px;
+  padding: 15px; /* Aumenta o padding para aumentar a altura */
+  font-size: 16px; /* Aumenta o tamanho da fonte */
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 50px; /* Define uma altura específica, ajuste conforme necessário */
+  box-sizing: border-box; /* Garante que o padding não ultrapasse a altura definida */
+}
+
+
+.login-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: bold;
+  margin-top: 20px;
+  color: #fff; /* Alterar para branco */
+  text-align: center;
+}
+
+
+
+
+.login-button:hover {
+  background-color: #01d636;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.login-error {
+  margin-top: 10px;
+  font-size: 14px;
+  color: red;
+}
+
+.cadastro-link {
+  margin-top: 15px;
+  color: white;
+  text-align: center;
+  display: block;
+  font-weight: bold;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+
+.register-button {
+  margin-top: 10px;
+  color: #fff;
+  border-color: #fff;
+  background-color: transparent;
+  font-size: 14px;
+  border-radius: 8px;
+  border: 2px solid #fff; /* Adiciona borda para delinear o botão */
+}
+
+.register-button:hover {
+  background-color: rgba(241, 241, 241, 0.1);
+}
+.inputField {
+  border: none !important; /* Remove a borda padrão */
+  border-radius: 0 !important; /* Remove qualquer borda arredondada */
+}
+
+
+
+/* Estilo para garantir que a linha fique na parte inferior do input */
+.MuiInput-root {
+  position: relative;
+  display: flex;
+  align-items: bottom;
+}
+
+
+.css-1o3an4k-MuiInputBase-input-MuiInput-input {
+    font: inherit;
+    letter-spacing: inherit;
+    color: currentColor;
+    padding: 13px !important; /* Ajusta o padding para dar espaço para a linha */
+    border: 0;
+    box-sizing: border-box; /* Garante que padding seja incluído na altura total */
+    background: none;
+    margin: 0; /* Remove qualquer margem */
+    height: 20px; /* Permite que a altura se ajuste conforme o padding */
+    min-width: 0;
+    width: 100%;
+    -webkit-animation-name: mui-auto-fill-cancel;
+    animation-name: mui-auto-fill-cancel;
+    -webkit-animation-duration: 10ms;
+    animation-duration: 10ms;
+}
+
+/* Ajusta a linha inferior do input */
+.MuiInput-underline:before,
+.MuiInput-underline:after {
+  padding-top: 20px;
+    bottom: 0; /* Garante que a linha esteja na parte inferior */
+    transform: translateY(100%); /* Move a linha para a parte inferior do input */
+    width: 100%; /* Garante que a linha ocupe toda a largura do input */
+}
+
+
+
+
+
+@keyframes blink1 {
+	0%,
+	50%,
+	100% {
+		opacity: 1;
+	}
+
+	25%,
+	75% {
+		opacity: 0;
+	}
+}
+
+@keyframes blink2 {
+	0% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 0.2;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes bounceBottom {
+	0% {
+		animation-timing-function: ease-in;
+		opacity: 1;
+		transform: translateY(45px);
+	}
+
+	24% {
+		opacity: 1;
+	}
+
+	40% {
+		animation-timing-function: ease-in;
+		transform: translateY(24px);
+	}
+
+	65% {
+		animation-timing-function: ease-in;
+		transform: translateY(12px);
+	}
+
+	82% {
+		animation-timing-function: ease-in;
+		transform: translateY(6px);
+	}
+
+	93% {
+		animation-timing-function: ease-in;
+		transform: translateY(4px);
+	}
+
+	25%,
+	55%,
+	75%,
+	87% {
+		animation-timing-function: ease-out;
+		transform: translateY(0px);
+	}
+
+	100% {
+		animation-timing-function: ease-out;
+		opacity: 1;
+		transform: translateY(0px);
+	}
+}
+
+@keyframes bounceLeft {
+	0% {
+		animation-timing-function: ease-in;
+		opacity: 1;
+		transform: translateX(-48px);
+	}
+
+	24% {
+		opacity: 1;
+	}
+
+	40% {
+		animation-timing-function: ease-in;
+		transform: translateX(-26px);
+	}
+
+	65% {
+		animation-timing-function: ease-in;
+		transform: translateX(-13px);
+	}
+
+	82% {
+		animation-timing-function: ease-in;
+		transform: translateX(-6.5px);
+	}
+
+	93% {
+		animation-timing-function: ease-in;
+		transform: translateX(-4px);
+	}
+
+	25%,
+	55%,
+	75%,
+	87%,
+	98% {
+		animation-timing-function: ease-out;
+		transform: translateX(0px);
+	}
+
+	100% {
+		animation-timing-function: ease-out;
+		opacity: 1;
+		transform: translateX(0px);
+	}
+}
+
+@keyframes bounceRight {
+	0% {
+		animation-timing-function: ease-in;
+		opacity: 1;
+		transform: translateX(48px);
+	}
+
+	24% {
+		opacity: 1;
+	}
+
+	40% {
+		animation-timing-function: ease-in;
+		transform: translateX(26px);
+	}
+
+	65% {
+		animation-timing-function: ease-in;
+		transform: translateX(13px);
+	}
+
+	82% {
+		animation-timing-function: ease-in;
+		transform: translateX(6.5px);
+	}
+
+	93% {
+		animation-timing-function: ease-in;
+		transform: translateX(4px);
+	}
+
+	25%,
+	55%,
+	75%,
+	87%,
+	98% {
+		animation-timing-function: ease-out;
+		transform: translateX(0px);
+	}
+
+	100% {
+		animation-timing-function: ease-out;
+		opacity: 1;
+		transform: translateX(0px);
+	}
+}
+
+@keyframes bounceTop {
+	0% {
+		animation-timing-function: ease-in;
+		opacity: 1;
+		transform: translateY(-45px);
+	}
+
+	24% {
+		opacity: 1;
+	}
+
+	40% {
+		animation-timing-function: ease-in;
+		transform: translateY(-24px);
+	}
+
+	65% {
+		animation-timing-function: ease-in;
+		transform: translateY(-12px);
+	}
+
+	82% {
+		animation-timing-function: ease-in;
+		transform: translateY(-6px);
+	}
+
+	93% {
+		animation-timing-function: ease-in;
+		transform: translateY(-4px);
+	}
+
+	25%,
+	55%,
+	75%,
+	87% {
+		animation-timing-function: ease-out;
+		transform: translateY(0px);
+	}
+
+	100% {
+		animation-timing-function: ease-out;
+		opacity: 1;
+		transform: translateY(0px);
+	}
+}
+
+@keyframes jelloHorizontal {
+	0% {
+		transform: scale3d(1, 1, 1);
+	}
+
+	30% {
+		transform: scale3d(1.25, 0.75, 1);
+	}
+
+	40% {
+		transform: scale3d(0.75, 1.25, 1);
+	}
+
+	50% {
+		transform: scale3d(1.15, 0.85, 1);
+	}
+
+	65% {
+		transform: scale3d(0.95, 1.05, 1);
+	}
+
+	75% {
+		transform: scale3d(1.05, 0.95, 1);
+	}
+
+	100% {
+		transform: scale3d(1, 1, 1);
+	}
+}
+
+@keyframes jelloVertical {
+	0% {
+		transform: scale3d(1, 1, 1);
+	}
+
+	30% {
+		transform: scale3d(0.75, 1.25, 1);
+	}
+
+	40% {
+		transform: scale3d(1.25, 0.75, 1);
+	}
+
+	50% {
+		transform: scale3d(0.85, 1.15, 1);
+	}
+
+	65% {
+		transform: scale3d(1.05, 0.95, 1);
+	}
+
+	75% {
+		transform: scale3d(0.95, 1.05, 1);
+	}
+
+	100% {
+		transform: scale3d(1, 1, 1);
+	}
+}
+
+@keyframes pulse {
+	0% {
+		transform: scale(1);
+	}
+
+	50% {
+		transform: scale(1.1);
+	}
+
+	100% {
+		transform: scale(1);
+	}
+}
+
+@keyframes heartbeat {
+	0% {
+		animation-timing-function: ease-out;
+		transform: scale(1);
+		transform-origin: center center;
+	}
+
+	10% {
+		animation-timing-function: ease-in;
+		transform: scale(0.91);
+	}
+
+	17% {
+		animation-timing-function: ease-out;
+		transform: scale(0.98);
+	}
+
+	33% {
+		animation-timing-function: ease-in;
+		transform: scale(0.87);
+	}
+
+	45% {
+		animation-timing-function: ease-out;
+		transform: scale(1);
+	}
+}
+
+@keyframes vibrate1 {
+	0% {
+		transform: translate(0);
+	}
+
+	20% {
+		transform: translate(-2px, 2px);
+	}
+
+	40% {
+		transform: translate(-2px, -2px);
+	}
+
+	60% {
+		transform: translate(2px, 2px);
+	}
+
+	80% {
+		transform: translate(2px, -2px);
+	}
+
+	100% {
+		transform: translate(0);
+	}
+}
+
+@keyframes vibrate2 {
+	0% {
+		transform: translate(0);
+	}
+
+	20% {
+		transform: translate(2px, -2px);
+	}
+
+	40% {
+		transform: translate(2px, 2px);
+	}
+
+	60% {
+		transform: translate(-2px, 2px);
+	}
+
+	80% {
+		transform: translate(-2px, -2px);
+	}
+
+	100% {
+		transform: translate(0);
+	}
+}
+
+@keyframes vibrate3 {
+	0% {
+		transform: translate(0);
+	}
+
+	10% {
+		transform: translate(-2px, -2px);
+	}
+
+	20% {
+		transform: translate(2px, -2px);
+	}
+
+	30% {
+		transform: translate(-2px, 2px);
+	}
+
+	40% {
+		transform: translate(2px, 2px);
+	}
+
+	50% {
+		transform: translate(-2px, -2px);
+	}
+
+	60% {
+		transform: translate(2px, -2px);
+	}
+
+	70% {
+		transform: translate(-2px, 2px);
+	}
+
+	80% {
+		transform: translate(-2px, -2px);
+	}
+
+	90% {
+		transform: translate(2px, -2px);
+	}
+
+	100% {
+		transform: translate(0);
+	}
+}
+
+@keyframes wobbleBottom {
+	0%,
+	100% {
+		transform: translateX(0%);
+		transform-origin: 50% 50%;
+	}
+
+	15% {
+		transform: translateX(-30px) rotate(-6deg);
+	}
+
+	30% {
+		transform: translateX(15px) rotate(6deg);
+	}
+
+	45% {
+		transform: translateX(-15px) rotate(-3.6deg);
+	}
+
+	60% {
+		transform: translateX(9px) rotate(2.4deg);
+	}
+
+	75% {
+		transform: translateX(-6px) rotate(-1.2deg);
+	}
+}
+
+@keyframes wobbleLeft {
+	0%,
+	100% {
+		transform: translateY(0) rotate(0);
+		transform-origin: 50% 50%;
+	}
+
+	15% {
+		transform: translateY(-30px) rotate(-6deg);
+	}
+
+	30% {
+		transform: translateY(15px) rotate(6deg);
+	}
+
+	45% {
+		transform: translateY(-15px) rotate(-3.6deg);
+	}
+
+	60% {
+		transform: translateY(9px) rotate(2.4deg);
+	}
+
+	75% {
+		transform: translateY(-6px) rotate(-1.2deg);
+	}
+}
+
+@keyframes wobbleRight {
+	0%,
+	100% {
+		transform: translateY(0) rotate(0);
+		transform-origin: 50% 50%;
+	}
+
+	15% {
+		transform: translateY(-30px) rotate(6deg);
+	}
+
+	30% {
+		transform: translateY(15px) rotate(-6deg);
+	}
+
+	45% {
+		transform: translateY(-15px) rotate(3.6deg);
+	}
+
+	60% {
+		transform: translateY(9px) rotate(-2.4deg);
+	}
+
+	75% {
+		transform: translateY(-6px) rotate(1.2deg);
+	}
+}
+
+@keyframes wobbleTop {
+	0%,
+	100% {
+		transform: translateX(0%);
+		transform-origin: 50% 50%;
+	}
+
+	15% {
+		transform: translateX(-30px) rotate(6deg);
+	}
+
+	30% {
+		transform: translateX(15px) rotate(-6deg);
+	}
+
+	45% {
+		transform: translateX(-15px) rotate(3.6deg);
+	}
+
+	60% {
+		transform: translateX(9px) rotate(-2.4deg);
+	}
+
+	75% {
+		transform: translateX(-6px) rotate(1.2deg);
+	}
+}
+
+/* Animação de rotação */
+@keyframes rotateAnimation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulsePing {
+	0% {
+		opacity: 0.8;
+		transform: scale(0.2);
+	}
+
+	80% {
+		opacity: 0;
+		transform: scale(1.2);
+	}
+
+	100% {
+		opacity: 0;
+		transform: scale(2.2);
+	}
+}
+
+
+
+/* Animação de sacudir Horizontal */
+@keyframes shakeHorizontal {
+	0%,
+	100% {
+		transform: translateX(0);
+	}
+
+	10%,
+	30%,
+	50%,
+	70% {
+		transform: translateX(-10px);
+	}
+
+	20%,
+	40%,
+	60% {
+		transform: translateX(10px);
+	}
+
+	80% {
+		transform: translateX(8px);
+	}
+
+	90% {
+		transform: translateX(-8px);
+	}
+}
+
+/* Animação de sacudir verticalmente */
+@keyframes shakeVertical {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+
+	10%,
+	30%,
+	50%,
+	70% {
+		transform: translateY(-8px);
+	}
+
+	20%,
+	40%,
+	60% {
+		transform: translateY(8px);
+	}
+
+	80% {
+		transform: translateY(6.4px);
+	}
+
+	90% {
+		transform: translateY(-6.4px);
+	}
+}
+
+/* Animação de sacudir e girar */
+@keyframes shakeRotate {
+	0%,
+	100% {
+		transform: rotate(0deg);
+		transform-origin: 50% 50%;
+	}
+
+	10% {
+		transform: rotate(8deg);
+	}
+
+	20%,
+	40%,
+	60% {
+		transform: rotate(-10deg);
+	}
+
+	30%,
+	50%,
+	70% {
+		transform: rotate(10deg);
+	}
+
+	80% {
+		transform: rotate(-8deg);
+	}
+
+	90% {
+		transform: rotate(8deg);
+	}
+}
+
+/* Animação de sacudir de baixo para cima */
+@keyframes shakeBottom {
+	0%,
+	100% {
+		transform: rotate(0deg);
+		transform-origin: 50% 100%;
+	}
+
+	10% {
+		transform: rotate(2deg);
+	}
+
+	20%,
+	40%,
+	60% {
+		transform: rotate(-4deg);
+	}
+
+	30%,
+	50%,
+	70% {
+		transform: rotate(4deg);
+	}
+
+	80% {
+		transform: rotate(-2deg);
+	}
+
+	90% {
+		transform: rotate(2deg);
+	}
+}
+
+/* Animação de sacudir para a esquerda */
+@keyframes shakeLeft {
+	0%,
+	100% {
+		transform: rotate(0deg);
+		transform-origin: 0 50%;
+	}
+
+	10% {
+		transform: rotate(2deg);
+	}
+
+	20%,
+	40%,
+	60% {
+		transform: rotate(-4deg);
+	}
+
+	30%,
+	50%,
+	70% {
+		transform: rotate(4deg);
+	}
+
+	80% {
+		transform: rotate(-2deg);
+	}
+
+	90% {
+		transform: rotate(2deg);
+	}
+}
+
+/* Animação de sacudir para a direita */
+@keyframes shakeRight {
+	0%,
+	100% {
+		transform: rotate(0deg);
+		transform-origin: 100% 50%;
+	}
+
+	10% {
+		transform: rotate(2deg);
+	}
+
+	20%,
+	40%,
+	60% {
+		transform: rotate(-4deg);
+	}
+
+	30%,
+	50%,
+	70% {
+		transform: rotate(4deg);
+	}
+
+	80% {
+		transform: rotate(-2deg);
+	}
+
+	90% {
+		transform: rotate(2deg);
+	}
+}
+
+/* Animação de sacudir de cima para baixo */
+@keyframes shakeTop {
+	0%,
+	100% {
+		transform: rotate(0deg);
+		transform-origin: 50% 0;
+	}
+
+	10% {
+		transform: rotate(2deg);
+	}
+
+	20%,
+	40%,
+	60% {
+		transform: rotate(-4deg);
+	}
+
+	30%,
+	50%,
+	70% {
+		transform: rotate(4deg);
+	}
+
+	80% {
+		transform: rotate(-2deg);
+	}
+
+	90% {
+		transform: rotate(2deg);
+	}
+}
+
+/* Classes de Animação */
+
+.blink1 { animation: blink1 10s ease 0s 3 normal forwards; }
+.blink2 { animation: blink2 10s ease 0s 3 normal forwards; }
+.bounceBottom { animation: bounceBottom 10s ease 0s 3 normal forwards; }
+.bounceLeft { animation: bounceLeft 10s ease 0s 3 normal forwards; }
+.bounceRight { animation: bounceRight 10s ease 0s 3 normal forwards; }
+.bounceTop { animation: bounceTop 10s ease 0s 3 normal forwards; }
+.jelloHorizontal { animation: jelloHorizontal 10s ease 0s 3 normal forwards; }
+.jelloVertical { animation: jelloVertical 10s ease 0s 3 normal forwards; }
+.pulse { animation: pulse 10s ease 0s 3 normal forwards; }
+.heartbeat { animation: heartbeat 10s ease 0s 3 normal forwards; }
+.vibrate1 { animation: vibrate1 3s ease 0s 3 normal forwards; }
+.vibrate2 { animation: vibrate2 3s ease 0s 3 normal forwards; }
+.vibrate3 { animation: vibrate3 3s ease 0s 3 normal forwards; }
+.wobbleBottom { animation: wobbleBottom 10s ease 0s 3 normal forwards; }
+.wobbleLeft { animation: wobbleLeft 10s ease 0s 3 normal forwards; }
+.wobbleRight { animation: wobbleRight 10s ease 0s 3 normal forwards; }
+.wobbleTop { animation: wobbleTop 10s ease 0s 3 normal forwards;}
+.rotate { animation: rotateAnimation 10s ease 0s 3 normal forwards; }
+.pulsePing { animation: pulsePing 4s ease 0s 3 normal forwards; }
+
+
+.shakeHorizontal { animation: shakeHorizontal 10s ease 0s 3 normal forwards; }
+.shakeVertical { animation: shakeVertical 6s ease-in-out 0s 3 normal forwards;}
+.shakeRotate { animation: shakeRotate 10s ease 0s 3 normal forwards; }
+.shakeBottom { animation: shakeBottom 10s ease 0s 3 normal backwards; }
+.shakeLeft { animation: shakeLeft 10s ease 0s 3 normal forwards; }
+.shakeRight { animation: shakeRight 10s ease 0s 3 normal forwards; }
+.shakeTop { animation: shakeTop 10s ease 0s 3 normal forwards; }

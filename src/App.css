@@ -1,0 +1,316 @@
+
+html, body, #root {
+  height: 100%;
+  overflow: auto;
+}
+
+/* Variáveis CSS */
+:root {
+  --primary-color: #03b803; /* Cor padrão */
+  --header-icon-color: #03b803;
+  --footer-icon-color: #e06500;
+  --backgroundColor: #ffffff;
+}
+
+/* Usando as variáveis em todo o app */
+body {
+  background-color: var(--backgroundColor); /* Exemplo de uso da cor primária */
+}
+
+.header-icon {
+  color: var(--header-icon-color);
+}
+
+.footer-icon {
+  color: var(--footer-icon-color);
+}
+
+/* Outros estilos que dependem das cores */
+.MuiButton-containedPrimary {
+  background-color: var(--backgroundColor);
+}
+
+
+/* Estilo para o contêiner do Box */
+.inline-box {
+  display: inline-block;
+  margin-right: -10px;
+  padding: 10px;
+}
+
+/* Estilo para a imagem */
+.rounded-image {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 4px solid var(--primary-color); /* Cor da borda */
+  object-fit: cover;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.custom-typography {
+  margin: 0;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 700; /* O último font-weight de 700 será o que prevalece */
+  font-size: 14px; /* O último font-size de 14px será o que prevalece */
+  /* line-height: 1.6; */
+  letter-spacing: 0.0075em;
+  color: #444;
+  margin-left: 5px;
+  /* margin-top: 25px; */
+  padding: 20px;
+}
+
+
+
+/* App.css */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* App.css */
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: #e0e0e0; /* Cor de fundo */
+}
+
+/* Garantindo que o header não fique fixo */
+header {
+  position: fixed; /* Altere de fixed para relative */
+  top: 0;
+  width: 100%;
+  z-index: 1; /* Mantenha-o acima do conteúdo */
+}
+
+/* App.css */
+.app-container {
+  overflow-x: hidden; /* Evita scroll horizontal */
+  width: 100%;
+  /*padding-bottom: 10px;  Adiciona um padding para o espaço do footer */
+  position: relative;
+  min-height: 100vh; /* Garante que o conteúdo ocupe pelo menos 100% da altura da viewport */
+}
+
+
+/* Conteúdo do dashboard */
+.dashboard-content {
+  flex-grow: 1; /* Faz o conteúdo crescer */
+  overflow-y: auto; /* Ativa a rolagem quando o conteúdo exceder a altura */
+  min-height: 100vh; /* Garante que ocupe a altura total da viewport */
+}
+
+.login-container {
+  min-height: 18vh; /* Garante que a altura da página de login ocupe a viewport inteira */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Faz com que a imagem cubra a tela inteira */
+  z-index: -1; /* Coloca a imagem de fundo atrás do conteúdo */
+}
+
+.login-content {
+  z-index: 1; /* Garante que o conteúdo da página fique acima da imagem de fundo */
+  position: relative;
+}
+
+
+
+
+.MuiTypography-h4 {
+  font-weight: bold;
+  text-align: center;
+}
+
+.MuiButton-containedPrimary {
+  background-color: var(--backgroundColor);
+}
+
+.MuiButton-containedSuccess {
+  background-color: var(--backgroundColor);
+}
+
+.MuiButton-containedSecondary {
+  background-color: var(--backgroundColor);
+}
+
+.MuiButton-contained {
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 20px;
+  padding: 10px 20px;
+}
+
+.MuiButton-contained:not(:last-child) {
+  margin-right: 10px;
+}
+
+.MuiInput-underline:after {
+  border-bottom: 2px solid var(--primary-color) !important; /* Define a linha ativa */
+  position: absolute; /* Garante que a linha ativa esteja posicionada corretamente */
+  bottom: 12px; /* Move a linha ativa para o fundo do input */
+  width: 100%; /* Garante que a linha ativa ocupe toda a largura do input */
+}
+
+.login-button {
+  margin-top: 20px;
+  background-color: #fff;
+  color: var(--primary-color) !important;
+  border: 2px solid var(--primary-color);
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s ease-in-out;
+}
+
+.register-button {
+  margin-top: 10px;
+  color: #fff;
+  border-color: #fff;
+  background-color: transparent;
+  font-size: 14px;
+  border-radius: 8px;
+  border: 2px solid var(--primary-color) !important; /* Adiciona borda para delinear o botão */
+}
+
+/* Estilo para os ícones de notificação e logout */
+.icon-button {
+  color: var(--primary-color) !important; /* Usa a variável de cor primária, ou um valor padrão */
+  margin-right: 10px;
+}
+
+.icon-button:last-child {
+  margin-right: 0; /* Remove a margem direita do último ícone */
+}
+
+/* Adicional: Estilo para o box que contém os ícones */
+.icon-container {
+  display: flex;
+  align-items: center;
+}
+
+
+
+.swiper {
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  overflow: hidden;
+  list-style: none;
+  padding: 0;
+  /* z-index: 1; */
+  display: block;
+}
+
+
+
+.fatura-box h6 {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.fatura-box h3 {
+  font-size: 36px;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.modal-content {
+  width: 90%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: var(--backgroundColor);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* App.css */
+
+.loading-modal {
+  color: var(var(--primary-color)); /* Usa uma variável CSS ou uma cor padrão */
+  margin-top: 10px;
+}
+
+
+
+
+
+
+
+
+
+/* Estilo para os ícones do footer */
+.footer-icon {
+  color: var(--primary-color);
+}
+/* Estilo para as labels do footer */
+.footer-label {
+  color: var(--footer-label-color, #000000); /* Usa a variável ou uma cor padrão */
+  font-size: 14px; /* Tamanho da fonte (ajuste conforme necessário) */
+}
+
+
+
+
+
+
+
+
+
+
+
+/* Fonte estilizada para a saudação */
+.greeting {
+  font-family: 'Roboto', sans-serif; /* Use uma fonte bonita como Roboto */
+  font-size: 24px;
+  color: #333;
+}
+
+.greeting strong {
+  font-weight: bold;
+  color: #000; /* "Olá" em negrito */
+}
+
+.greeting span {
+  text-transform: lowercase; /* Garante que o nome seja exibido em minúsculas */
+}
+
+.css-1bjk3jo-MuiButtonBase-root-MuiBottomNavigationAction-root.Mui-selected {
+  color: #ffffff;
+}
+
+
+
+
+
+/* Estilo para esconder a barra de rolagem em navegadores modernos */
+.acesso-rapido-scroll::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.acesso-rapido-scroll {
+  -ms-overflow-style: none;  /* IE e Edge */
+  scrollbar-width: none;  /* Firefox */
+}

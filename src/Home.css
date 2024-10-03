@@ -1,0 +1,7 @@
+.novidade-imagem {
+    width: 100%;
+    height: auto;
+    border-radius: 50%; /* Arredonda a imagem */
+    object-fit: cover;
+  }
+  
