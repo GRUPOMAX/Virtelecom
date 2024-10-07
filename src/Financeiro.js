@@ -1,7 +1,46 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Paper, Grid, Button, Snackbar, Alert, Modal } from '@mui/material';
+import { Tooltip ,Dialog, DialogTitle, DialogContent, DialogActions, Box, Typography, Paper, Grid, Button, Snackbar, Alert, Modal, Collapse } from '@mui/material';
 import { QRCodeCanvas } from 'qrcode.react';
 import { format, differenceInCalendarDays, isBefore, isAfter } from 'date-fns';
+import axios from 'axios';
+import BroadcastOnHomeIcon from '@mui/icons-material/BroadcastOnHome';
+import HandshakeIcon from '@mui/icons-material/Handshake';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
+import BroadcastOnPersonalIcon from '@mui/icons-material/BroadcastOnPersonal';
+import DoneIcon from '@mui/icons-material/Done';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
+import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+
+
+
+
+/*TEXTOS*/
+const textFaturaEmDia = 'Fatura Vencendo Hoje';
+const textFaturAtrasa = 'Fatura Atrasada';
+const textFaturAVencer = 'Fatura a Vencer';
+const textProximFatura = 'Próxima Fatura';
+const textDesbloqueio  = 'Desbloqueio Disponivel';
+
+
+
+
+
+const verificarStatusFatura = (dataVencimento) => {
+  const hoje = new Date();
+  const vencimento = new Date(dataVencimento);
+  const proximoMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 1);
+
+  hoje.setHours(0, 0, 0, 0);
+  vencimento.setHours(0, 0, 0, 0);
+
+  if (vencimento.getTime() === hoje.getTime()) return textFaturaEmDia;
+  if (vencimento < hoje) return textFaturAtrasa;
+  if (vencimento >= proximoMes) return textFaturAVencer;
+  return textProximFatura;
+};
+
 
 function Financeiro({ dados }) {
   const [openSnackbarSuccess, setOpenSnackbarSuccess] = useState(false);
@@ -13,6 +52,8 @@ function Financeiro({ dados }) {
   const [sendingMethod, setSendingMethod] = useState(null); // Método de envio (WhatsApp ou Email)
   const [boletoSelecionado, setBoletoSelecionado] = useState(null); // Estado para armazenar o idBoleto
   const [pixData, setPixData] = useState(null); // Define o estado para armazenar as informações do Pix
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
 
 
@@ -34,7 +75,7 @@ function Financeiro({ dados }) {
 
 
   const faturasOrdenadas = dados?.boletos?.sort((a, b) => new Date(a.data_vencimento) - new Date(b.data_vencimento)) || [];
-  const proximasFaturas = faturasOrdenadas.slice(0, 1); // Pegando as duas primeiras faturas mais próximas
+  const proximasFaturas = faturasOrdenadas.slice(0, 2); // Pegando as duas primeiras faturas mais próximas
 
   // Defina os estados para armazenar as cores
   const [primaryColor, setPrimaryColor] = useState('#000'); // Cor padrão inicial
@@ -56,6 +97,49 @@ function Financeiro({ dados }) {
   const [logoUrl, setLogoUrl] = useState(''); // State to store the URL or image
   const [backgroundUrl, setBackgroundUrl] = useState(''); // Estado para armazenar o URL do background
 
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+
+  const [showProximasFaturas, setShowProximasFaturas] = useState(false);
+  const [showProximaFatura, setShowProximaFatura] = useState(false);
+  const [idContrato, setIdContrato] = useState(null);
+  
+
+  const [exibirBotaoDesbloqueio, setExibirBotaoDesbloqueio] = useState(false);
+  const [iconOpenDesConfiança, setIconOpenDesConfiança] = useState(null);
+  const [selectedIcon, setSelectedIcon] = useState(null);
+  const [showTooltip, setShowTooltip] = useState(false);
+
+
+
+
+
+
+
+    // Filtra a "Próxima Fatura" (aquela que está no próximo mês) das outras faturas
+  const proximaFatura = proximasFaturas.find((fatura) => verificarStatusFatura(fatura.data_vencimento) === "Próxima Fatura");
+  const outrasFaturas = proximasFaturas.filter((fatura) => verificarStatusFatura(fatura.data_vencimento) !== "Próxima Fatura");
+
+
+
+
+  // Mapeamento dos ícones disponíveis
+    const iconsMap = {
+      BroadcastOnHomeIcon: <BroadcastOnHomeIcon />,
+      HandshakeIcon:  <HandshakeIcon />,
+      LockOpenIcon: < LockOpenIcon/>,
+      CheckCircleOutlineIcon: < CheckCircleOutlineIcon/>,
+      CheckCircleIcon: <CheckCircleIcon />,
+      DoneOutlineIcon: <DoneOutlineIcon />,
+      DoneAllIcon: <DoneAllIcon />,
+      DoneIcon: <DoneIcon />,
+      BroadcastOnPersonalIcon: <BroadcastOnPersonalIcon/>
+
+    };
+
+  const toggleProximaFatura = () => {
+    setShowProximaFatura(!showProximaFatura);
+  };
 
 
   useEffect(() => {
@@ -185,10 +269,124 @@ function Financeiro({ dados }) {
   }, []);
   
 
+  // Função para buscar o ícone diretamente da API
+  useEffect(() => {
+    const iconsTableId = 'm27t8z8ht25mplj'; // ID da tabela de ícones
+    const token = 'ZqFzoCRvPCyzSRAIKPMbnOaLwR6laivSdxcpXiA5';
+
+    const fetchIcon = async () => {
+      try {
+        const responseIcons = await fetch(`https://nocodb.nexusnerds.com.br/api/v2/tables/${iconsTableId}/records`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'xc-token': token,
+          },
+        });
+
+        if (responseIcons.ok) {
+          const dataIcons = await responseIcons.json();
+          const iconName = dataIcons.list[0]?.IconOpenDesConfiança;
+
+          // Atualiza o estado iconOpenDesConfiança com o nome do ícone retornado pela API
+          if (iconName) {
+            setIconOpenDesConfiança(iconName);
+          } else {
+            console.warn('Ícone não encontrado na resposta da API:', iconName);
+          }
+        } else {
+          console.error('Erro ao buscar ícones:', responseIcons.statusText);
+        }
+      } catch (error) {
+        console.error('Erro ao buscar ícones:', error);
+      }
+    };
+
+    fetchIcon();
+  }, []);
+  
+
+
+  // Carregar os dados do cliente do localStorage
+  const loadClientData = async () => {
+    const storedData = localStorage.getItem('dadosCliente');
+    if (storedData) {
+      try {
+        const dadosCliente = JSON.parse(storedData);
+        console.log('Dados Cliente:', dadosCliente);
+
+        // Verificar se o id_contrato está presente
+        if (dadosCliente?.id_contrato) {
+          setIdContrato(dadosCliente.id_contrato);
+        } else {
+          console.warn('ID do contrato não encontrado nos dados do cliente, tentando buscar pelo ID do cliente...');
+
+          // Fazer requisição para obter o id_contrato pelo id_cliente
+          if (dadosCliente?.id_cliente) {
+            try {
+              const response = await axios.get('https://www.db.app.nexusnerds.com.br/contratos', {
+                params: { id_cliente: dadosCliente.id_cliente }
+              });
+
+              if (response.data && response.data.id_contrato) {
+                setIdContrato(response.data.id_contrato);
+                console.log('ID do contrato encontrado:', response.data.id_contrato);
+              } else {
+                console.warn('Contrato não encontrado para o cliente informado.');
+              }
+            } catch (error) {
+              console.error('Erro ao buscar o contrato pelo ID do cliente:', error);
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Erro ao carregar os dados do cliente do localStorage:', error);
+      }
+    } else {
+      console.warn('Nenhum dado do cliente encontrado no localStorage.');
+    }
+  };
+
+  // Função para verificar se a fatura está atrasada há mais de 10 dias
+  const verificarBloqueio = (dataVencimento) => {
+    if (dataVencimento) {
+      const hoje = new Date();
+      const vencimento = new Date(dataVencimento);
+      const diasEmAtraso = (hoje - vencimento) / (1000 * 60 * 60 * 24);
+
+      if (diasEmAtraso > 10) {
+        setExibirBotaoDesbloqueio(true);
+      } else {
+        setExibirBotaoDesbloqueio(false);
+      }
+    }
+  };
+
+const desbloqueioConfianca = async (idContrato) => {
+  try {
+    const response = await axios.post('https://www.appmax.nexusnerds.com.br/desbloqueio-confianca', { idContrato });
+    console.log('Desbloqueio solicitado com sucesso:', response.data);
+
+    if (response.data.success) {
+      setModalMessage(response.data.data.message); // Define a mensagem do modal com o sucesso
+      setModalOpen(true); // Abre o modal com a mensagem de sucesso
+    }
+  } catch (error) {
+    console.error('Erro ao solicitar desbloqueio:', error);
+    alert('Erro ao solicitar desbloqueio.');
+  }
+};
+
+
+const handleClose = () => {
+  setModalOpen(false);
+};
 
 
 
-
+useEffect(() => {
+  loadClientData();
+}, []);
 
 
   
@@ -202,43 +400,40 @@ function Financeiro({ dados }) {
       });
   };
 
-  const handleCopyQRCode = () => {
-    navigator.clipboard.writeText(qrCodePix)
-      .then(() => {
-        setCopied(true);
-      })
-      .catch(err => {
-        console.error('Erro ao copiar o QR Code', err);
-      });
-  };
 
+
+
+  
+  
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
     setCopied(false);
     setOpenSnackbarSuccess(false); // Fecha o popup de sucesso
   };
 
+  // Função para abrir o modal e buscar dados do Pix com o ID do boleto
   const handleOpenModal = async (idBoleto) => {
+    setBoletoSelecionado(idBoleto); // Salva o id do boleto selecionado
+
     try {
-      // Certifique-se de que o 'idBoleto' está sendo corretamente recebido
-      console.log('ID do boleto enviado para o backend:', idBoleto);
-
-      // Faz a requisição para buscar os dados do Pix
       const response = await fetch('https://www.appmax.nexusnerds.com.br/buscar-pix', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ idBoleto }),
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idBoleto }),
       });
-
-    const pixData = await response.json();
-    setPixData(pixData); // Atualiza os dados do Pix
-    setOpenModal(true);   // Abre o modal de pagamento com PIX
-        } catch (error) {
-            console.error('Erro ao buscar o PIX:', error.message);
-        }
-      };
+      
+      const result = await response.json();
+      
+      if (result && result.pixData) {
+        setPixData(result.pixData); // Atualiza o estado do Pix
+        setOpenModal(true); // Abre o modal
+      } else {
+        console.warn('Dados do Pix não disponíveis');
+      }
+    } catch (error) {
+      console.error('Erro ao buscar o PIX:', error.message);
+    }
+  };
 
 
 
@@ -278,7 +473,7 @@ function Financeiro({ dados }) {
         tipo_boleto: method === 'whatsapp' ? 'sms' : 'email'
       };
 
-      const response = await fetch(`http://localhost:4000${endpoint}`, {
+      const response = await fetch(`https://www.appmax.nexusnerds.com.br${endpoint}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -298,14 +493,13 @@ function Financeiro({ dados }) {
     }
   };
 
-  const verificarStatusFatura = (dataVencimento) => {
-    const hoje = new Date();
-    const vencimento = new Date(dataVencimento);
-    if (vencimento > hoje) {
-      return "Próxima Fatura";
-    }
-    return "Fatura Ativa";
+
+  const toggleProximasFaturas = () => {
+    setShowProximasFaturas(!showProximasFaturas);
   };
+
+
+  
 
 
 
@@ -367,12 +561,43 @@ function Financeiro({ dados }) {
 
 
 
+  const copyToClipboard = () => {
+    if (pixData && pixData.pix && pixData.pix.qrCode && pixData.pix.qrCode.qrcode) {
+      navigator.clipboard.writeText(pixData.pix.qrCode.qrcode)
+        .then(() => {
+          setCopied(true); // Exibe o Snackbar de sucesso
+        })
+        .catch(err => {
+          console.error('Erro ao copiar a chave Pix:', err);
+          setSnackbarMessage('Erro ao copiar a chave Pix.'); // Mensagem de erro no Snackbar
+          setSnackbarSeverity('error'); // Define a severidade do Snackbar como erro
+          setOpenSnackbar(true); // Exibe o Snackbar
+        });
+    } else {
+      setSnackbarMessage('Chave Pix não disponível.'); // Mensagem de chave não disponível
+      setSnackbarSeverity('error'); // Define a severidade do Snackbar como erro
+      setOpenSnackbar(true); // Exibe o Snackbar
+    }
+  };
 
 
 
+  const verificarSeBloqueado = (dataVencimento) => {
+    const hoje = new Date();
+    const vencimento = new Date(dataVencimento);
+    const diasAtraso = (hoje - vencimento) / (1000 * 60 * 60 * 24);
+    return diasAtraso > 10;
+  };
+  
 
 
 
+  useEffect(() => {
+    const toggleTooltip = () => setShowTooltip(prev => !prev);
+    const interval = setInterval(toggleTooltip, Math.floor(Math.random() * 5000) + 5000);
+
+    return () => clearInterval(interval);
+  }, []);
 
 
 
@@ -389,22 +614,24 @@ function Financeiro({ dados }) {
   return (
     <div>
       <Box sx={{ padding: '20px' }}>
-        <Typography variant="h6" gutterBottom>
-          Minhas Faturas
-        </Typography>
+      <Typography variant="h6" gutterBottom>
+        Minhas Faturas
+      </Typography>
 
-        {proximasFaturas.length > 0 ? (
-          proximasFaturas.map((fatura, index) => (
+        {/* Outras Faturas (exceto a próxima) */}
+        {outrasFaturas.length > 0 ? (
+          outrasFaturas.map((fatura, index) => (
             <Paper
               key={index}
               elevation={3}
               sx={{
                 borderRadius: '20px',
                 padding: '15px',
-                backgroundColor: cardBackgroundColor || '#F1F1F1', // Usa a cor dinâmica
+                backgroundColor: cardBackgroundColor || '#F1F1F1',
                 marginBottom: '20px',
               }}
             >
+              {/* Conteúdo da fatura */}
               <Grid container spacing={2} alignItems="center">
                 <Grid item xs={6}>
                   <Typography
@@ -440,6 +667,7 @@ function Financeiro({ dados }) {
                 justifyContent="center"
                 sx={{ marginTop: '15px' }}
               >
+                {/* Botões e funcionalidades da fatura */}
                 <Grid item xs={4} style={{ textAlign: 'center' }}>
                   <Button
                     variant="text"
@@ -515,13 +743,184 @@ function Financeiro({ dados }) {
               </Grid>
             </Paper>
           ))
-        ) : (
+        ) : null}
+
+        {/* Próxima Fatura dentro do Collapse */}
+        {proximaFatura ? (
+          <>
+            <Button
+              variant="outlined"
+              onClick={toggleProximaFatura}
+              sx={{ marginBottom: '20px', color: highlightColor || '#09DB05', borderColor: primaryColor || 'black' }}
+            >
+              {showProximaFatura ? "Esconder Próxima Fatura" : "Mostrar Próxima Fatura"}
+            </Button>
+
+            <Collapse in={showProximaFatura}>
+              <Paper
+                elevation={3}
+                sx={{
+                  borderRadius: '20px',
+                  padding: '15px',
+                  backgroundColor: cardBackgroundColor || '#F1F1F1',
+                  marginBottom: '20px',
+                }}
+              >
+                {/* Conteúdo da próxima fatura */}
+                <Grid container spacing={2} alignItems="center">
+                  <Grid item xs={6}>
+                    <Typography
+                      variant="h6"
+                      color={highlightColor || '#09DB05'}
+                      gutterBottom
+                    >
+                      {verificarStatusFatura(proximaFatura.data_vencimento)}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6} style={{ textAlign: 'right' }}>
+                    <Typography variant="caption" color={highlightColor || '#09DB05'}>
+                      Vencimento
+                    </Typography>
+                    <Typography variant="body2" color={highlightColor || '#09DB05'}>
+                      {formatarDataBR(proximaFatura.data_vencimento)}
+                    </Typography>
+                  </Grid>
+                </Grid>
+
+                <Typography
+                  variant="h4"
+                  color={highlightColor || '#09DB05'}
+                  sx={{ fontWeight: 'bold', textAlign: 'center', marginTop: '10px' }}
+                >
+                  R$ {proximaFatura.valor_aberto}
+                </Typography>
+
+                <Grid
+                  container
+                  spacing={2}
+                  alignItems="center"
+                  justifyContent="center"
+                  sx={{ marginTop: '15px' }}
+                >
+                  {/* Botões e funcionalidades da próxima fatura */}
+                  <Grid item xs={4} style={{ textAlign: 'center' }}>
+                    <Button
+                      variant="text"
+                      color={highlightColor || '#09DB05'}
+                      sx={{ fontSize: '10px', display: 'flex', flexDirection: 'column' }}
+                      onClick={() => {
+                        setBoletoSelecionado(proximaFatura);
+                        setOpenConfirmModal(true);
+                      }}
+                    >
+                      <img
+                        src={iconeEnviarUrl || 'https://i.ibb.co/4W2FynC/seta-para-cima.png'}
+                        alt="Ícone Enviar"
+                        style={{ width: '24px' }}
+                      />
+                      <Typography
+                        variant="caption"
+                        color={highlightColor || '#09DB05'}
+                        sx={{ marginTop: '4px' }}
+                      >
+                        2ª VIA
+                      </Typography>
+                    </Button>
+                  </Grid>
+
+                  <Grid item xs={4} style={{ textAlign: 'center' }}>
+                    <Button
+                      variant="text"
+                      sx={{ color: 'black', fontSize: '10px', display: 'flex', flexDirection: 'column' }}
+                      onClick={() => {
+                        setBoletoSelecionado(proximaFatura);
+                        setOpenBoletoModal(true);
+                      }}
+                    >
+                      <img
+                        src={iconeBarrasUrl || 'https://i.ibb.co/MPcb9jn/codigo-de-barras.png'}
+                        alt="icone-barras"
+                        style={{ width: '24px' }}
+                      />
+                      <Typography
+                        variant="caption"
+                        color={highlightColor || '#09DB05'}
+                        sx={{ marginTop: '4px' }}
+                      >
+                        Baixar Boleto
+                      </Typography>
+                    </Button>
+                  </Grid>
+
+                  <Grid item xs={4} style={{ textAlign: 'center' }}>
+                    <Button
+                      variant="text"
+                      sx={{ color: 'black', fontSize: '10px', display: 'flex', flexDirection: 'column' }}
+                      onClick={() => {
+                        setBoletoSelecionado(proximaFatura);
+                        handleOpenModal(proximaFatura.id);
+                      }}
+                    >
+                      <img
+                        src={iconePixUrl || 'https://i.ibb.co/xLxNTgn/codigo-qr.png'}
+                        alt="icone-pix"
+                        style={{ width: '24px' }}
+                      />
+                      <Typography
+                        variant="caption"
+                        color={highlightColor || '#09DB05'}
+                        sx={{ marginTop: '4px' }}
+                      >
+                        PAGAR COM PIX
+                      </Typography>
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Paper>
+            </Collapse>
+          </>
+        ) : null}
+
+        {outrasFaturas.length === 0 && !proximaFatura && (
           <img
             src={backgroundUrl}
             alt="Nenhum Atendimento"
             style={{ width: '100%', height: 'auto', maxWidth: '400px' }}
           />
         )}
+
+        {outrasFaturas.length > 0 && verificarSeBloqueado(outrasFaturas[0].data_vencimento) && (
+              <Tooltip
+                title={textDesbloqueio}
+                open={showTooltip}
+                disableHoverListener
+                arrow
+                placement="top"
+              >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => desbloqueioConfianca(idContrato)}
+                  sx={{
+                    position: 'fixed',
+                    bottom: 80,
+                    right: 20,
+                    backgroundColor: primaryColor || '#09DB05',
+                    color: highlightColor || '#FFF',
+                    borderRadius: '50%',
+                    minWidth: '50px',
+                    minHeight: '50px',
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                  }}
+                >
+                  {iconsMap[iconOpenDesConfiança] || (
+                    <img src="URL_DO_ICONE_PADRAO" alt="Ícone de Desbloqueio de Confiança" />
+                  )}
+                </Button>
+              </Tooltip>
+            )}
+
+
 
         {/* Modal com as opções de copiar código de barras ou baixar boleto */}
         <Modal open={openBoletoModal} onClose={handleCloseModalBoleto}>
@@ -579,6 +978,8 @@ function Financeiro({ dados }) {
             </Grid>
           </Box>
         </Modal>
+
+        
 
         {/* Modal de Confirmação para WhatsApp ou Email */}
         <Modal open={openConfirmModal} onClose={handleCloseConfirmModal}>
@@ -642,38 +1043,18 @@ function Financeiro({ dados }) {
         </Modal>
 
         {/* Modal de Pagamento PIX */}
-        <Modal open={openModal} onClose={handleCloseModal}>
-          <Box
-            sx={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: 300,
-              bgcolor: 'background.paper',
-              boxShadow: 24,
-              p: 4,
-              borderRadius: '10px',
-              textAlign: 'center',
-            }}
-          >
-            <Typography variant="h6" gutterBottom>
-              QR Code para Pagamento via PIX
-            </Typography>
-            {pixData?.pix?.qrCode?.qrcode ? (
+        <Modal open={openModal} onClose={() => setOpenModal(false)}>
+          <Box sx={{
+            position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper', boxShadow: 24, p: 4, borderRadius: '10px', textAlign: 'center',
+          }}>
+            <Typography variant="h6" gutterBottom>QR Code para Pagamento via PIX</Typography>
+
+            {pixData && pixData.pix && pixData.pix.qrCode && pixData.pix.qrCode.qrcode ? (
               <>
                 <QRCodeCanvas value={pixData.pix.qrCode.qrcode} size={200} />
                 <Typography sx={{ marginTop: '15px' }}>Chave Copia e Cola:</Typography>
-                <Typography
-                  sx={{
-                    fontWeight: 'bold',
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    maxWidth: '250px',
-                    margin: '0 auto',
-                  }}
-                >
+                <Typography sx={{ fontWeight: 'bold', whiteSpace: 'nowrap', overflow: 'hidden', maxWidth: '250px', margin: '0 auto' }}>
                   {pixData.pix.qrCode.qrcode}
                 </Typography>
               </>
@@ -681,27 +1062,62 @@ function Financeiro({ dados }) {
               <Typography color="error">Erro: Chave Pix não disponível.</Typography>
             )}
 
+            
             <Button
-              variant="contained"
-              sx={{ marginTop: '10px', backgroundColor: buttonColor || '#198924', color: textFinButton || 'white' }}
-              onClick={handleCopyQRCode}
+                variant="contained"
+                sx={{
+                    marginTop: '10px',
+                    backgroundColor: buttonColor || '#198924', 
+                    color: textFinButton || 'white',
+                    fontSize: '14px',
+                    fontWeight: 'bold',
+                    padding: '10px 20px',
+                }}
+                onClick={copyToClipboard}
             >
-              Copiar Chave PIX
+                Copiar Chave PIX
             </Button>
+
           </Box>
         </Modal>
 
         <Snackbar open={openSnackbar || copied} autoHideDuration={3000} onClose={handleCloseSnackbar}>
           <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
-            {copied ? 'Chave Pix copiada com sucesso!' : 'Código de barras copiado com sucesso!'}
+              {copied ? 'Chave Pix copiada com sucesso!' : 'Código de barras copiado com sucesso!'}
           </Alert>
-        </Snackbar>
+      </Snackbar>
+
 
         <Snackbar open={openSnackbarSuccess} autoHideDuration={3000} onClose={handleCloseSnackbar}>
           <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
             Fatura enviada com sucesso!
           </Alert>
         </Snackbar>
+
+
+
+          {/* Modal para exibir a mensagem de erro */}
+          <Dialog open={modalOpen} onClose={handleClose}>
+            <DialogTitle>Desbloqueio de Confiança</DialogTitle>
+            <DialogContent>
+              <Typography>{modalMessage}</Typography>
+            </DialogContent>
+            <DialogActions>
+            <Button
+                onClick={handleClose} // Função para fechar o modal
+                sx={{
+                  color: primaryColor || 'black', // Altere para a cor desejada
+                  fontWeight: 'bold', // Opcional: torna o texto em negrito
+                  textTransform: 'uppercase', // Opcional: mantém o texto em maiúsculas
+                }}
+              >
+                FECHAR
+              </Button>
+
+            </DialogActions>
+          </Dialog>
+
+
       </Box>
     </div>
 
