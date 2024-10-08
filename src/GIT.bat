@@ -1,6 +1,5 @@
 @echo off
 
-
 REM Muda para o diretório do repositório
 cd "C:\Users\Joao\Documents\APLICATIVO CELULAR\APP-MAX"
 
@@ -21,8 +20,8 @@ git add .
 REM Comita com a mensagem fornecida
 git commit -m "%commit_message%"
 
-REM Faz o push para a branch principal (main)
-git push origin main
+REM Faz o push para a branch principal (master)
+git push
 
 echo Alterações enviadas com sucesso!
 pause
