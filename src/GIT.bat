@@ -24,4 +24,12 @@ REM Faz o push para a branch principal (master)
 git push
 
 echo Alterações enviadas com sucesso!
+
+REM Navega até o diretório src
+cd "C:\Users\Joao\Documents\APLICATIVO CELULAR\APP-MAX\src"
+
+REM Executa o comando npm run deploy
+npm run deploy
+
+echo Deploy executado com sucesso!
 pause

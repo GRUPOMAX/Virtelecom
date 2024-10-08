@@ -8,7 +8,7 @@ function Cadastro({ dados }) {
   const navigate = useNavigate();
   const [value, setValue] = React.useState(0); // Estado para o footer
 
-  //MUDANÇAS
+  //MUDANÇAS commit para teste
 
     // Função para formatar datas no formato brasileiro
     const formatarDataBrasileira = (data) => {
