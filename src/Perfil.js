@@ -16,7 +16,7 @@ function Perfil() {
   const [cidade, setCidade] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
   const [email, setEmail] = useState('');
-  const [secondaryColor, setSecondaryColor] = useState(''); // Adicionando estado para a cor secundária
+  const [secudaryColor, setsecudaryColor] = useState(''); // Adicionando estado para a cor secundária
   const [highlightColor, setHighlightColor] = useState(''); // Adicionando estado para a cor de destaque
   const [buttonColor, setButtonColor] = useState(''); // Adicionando estado para a cor do botão
   const [primaryColor, setPrimaryColor] = useState('green'); // Cor padrão
@@ -110,8 +110,8 @@ const fetchPrimaryColorAndIcons = async () => {
         if (settings.primaryColor) {
           setPrimaryColor(settings.primaryColor);
         }
-        if (settings.secondaryColor) {
-          setSecondaryColor(settings.secondaryColor);
+        if (settings.secudaryColor) {
+          setsecudaryColor(settings.secudaryColor);
         }
         if (settings.highlightColor) {
           setHighlightColor(settings.highlightColor);

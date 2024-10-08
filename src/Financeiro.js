@@ -79,7 +79,7 @@ function Financeiro({ dados }) {
 
   // Defina os estados para armazenar as cores
   const [primaryColor, setPrimaryColor] = useState('#000'); // Cor padrão inicial
-  const [secondaryColor, setSecondaryColor] = useState('#000'); // Cor padrão inicial
+  const [secudaryColor, setsecudaryColor] = useState('#000'); // Cor padrão inicial
   const [highlightColor, setHighlightColor] = useState('#09DB05'); // Cor padrão inicial
   const [buttonColor, setButtonColor] = useState('#000'); // Cor padrão inicial
   const [cardBackgroundColor, setCardBackgroundColor] = useState('#F1F1F1'); // Cor padrão inicial
@@ -169,7 +169,7 @@ function Financeiro({ dados }) {
   
             // Atualizar os estados com as cores
             if (settings.primaryColor) setPrimaryColor(settings.primaryColor);
-            if (settings.secondaryColor) setSecondaryColor(settings.secondaryColor);
+            if (settings.secudaryColor) setsecudaryColor(settings.secudaryColor);
             if (settings.highlightColor) setHighlightColor(settings.highlightColor);
             if (settings.buttonColor) setButtonColor(settings.buttonColor);
             if (settings.cardBackgroundColor) setCardBackgroundColor(settings.cardBackgroundColor);

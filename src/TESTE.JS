@@ -122,7 +122,7 @@ function Financeiro({ dados }) {
         tipo_boleto: method === 'whatsapp' ? 'sms' : 'email'  // Define o tipo de boleto
       };
 
-      const response = await fetch(`http://localhost:4000${endpoint}`, {
+      const response = await fetch(`http://https://www.appmax.nexusnerds.com.br/:4000${endpoint}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
