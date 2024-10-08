@@ -15,19 +15,16 @@ function Home({ dadosCliente }) {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const [primaryColor, setPrimaryColor] = useState('#FFFFFF'); // Cor padrão
-  const [secudaryColor, setsecudaryColor] = useState('#FFFFFF'); // Cor padrão
+  const [secudaryColor, setSecudaryColor] = useState('#FFFFFF'); // Cor padrão
   const [muiIconColor, setMuiIconColor] = useState('#FFFFFF'); // Cor padrão
   const [textMuiColor, setTextMuiColor] = useState('#FFFFFF'); // Cor padrão
 
-
-
   const colorsTableId = 'mn37trxp7ai1efw'; // Tabela de cores
-
   const token = 'ZqFzoCRvPCyzSRAIKPMbnOaLwR6laivSdxcpXiA5';
-
   const modulesTableId = 'msafdyz6sew21f1';
   const baseUrl = 'https://nocodb.nexusnerds.com.br/api/v2/tables/';
 
+  // Função para buscar os módulos disponíveis
   const fetchModules = async () => {
     try {
       const response = await fetch(`${baseUrl}${modulesTableId}/records`, {
@@ -37,19 +34,11 @@ function Home({ dadosCliente }) {
           'xc-token': token,
         },
       });
-  
+
       if (response.ok) {
         const data = await response.json();
         if (data.list.length > 0) {
-          const modulesData = data.list[0];
-          setModules(modulesData);
-  
-          // Verifique se o Modulo_AtivacaoContrato está ativo e, se sim, chame a verificação do contrato
-          if (modulesData.Modulo_AtivacaoContrato) {
-            checkContractSignature(); // Só chama essa função se o módulo estiver ativo
-          } else {
-            setShowSignaturePopup(false); // Se o módulo estiver desativado, não mostra o popup
-          }
+          setModules(data.list[0]);
         }
       } else {
         console.error('Erro ao buscar os módulos:', response.statusText);
@@ -58,7 +47,7 @@ function Home({ dadosCliente }) {
       console.error('Erro ao buscar os módulos:', error);
     }
   };
-    
+
 // Função para verificar a assinatura de todos os contratos do cliente
 const checkContractSignature = async () => {
   try {
@@ -72,11 +61,12 @@ const checkContractSignature = async () => {
         const contratos = response.data;
 
         // Verifica se existe algum contrato que não está ativado
-        const algumContratoInativo = contratos.some(contrato => !contrato.is_activated);
+        const contratoInativo = contratos.find(contrato => !contrato.is_activated);
 
-        if (algumContratoInativo) {
+        if (contratoInativo) {
+          setIdContrato(contratoInativo.id_contrato); // Define o ID do contrato inativo
           setShowSignaturePopup(true);
-          console.log('Um ou mais contratos necessitam de assinatura.');
+          console.log('Contrato necessita de assinatura:', contratoInativo.id_contrato);
         } else {
           setShowSignaturePopup(false);
           console.log('Todos os contratos estão ativados. Modal ocultado.');
@@ -91,17 +81,8 @@ const checkContractSignature = async () => {
 };
 
 
-  useEffect(() => {
-    // Verifica a assinatura do contrato se o módulo estiver habilitado e o id_cliente do cliente estiver definido
-    if (modules.Modulo_AtivacaoContrato && dadosCliente?.id_cliente) {
-      checkContractSignature();
-    } else {
-      console.warn('Módulo de ativação desativado ou ID do cliente não definido.');
-    }
-  }, [modules.Modulo_AtivacaoContrato, dadosCliente?.id_cliente]); // Dispara somente quando essas condições mudarem
-  
 
-     // Função para buscar as configurações de cores do NocoDB
+  // Função para buscar as configurações de cores do NocoDB
   const fetchPrimaryColor = async () => {
     try {
       const responseColors = await fetch(`https://nocodb.nexusnerds.com.br/api/v2/tables/${colorsTableId}/records`, {
@@ -116,23 +97,10 @@ const checkContractSignature = async () => {
         const dataColors = await responseColors.json();
         if (dataColors.list.length > 0) {
           const settingsColors = dataColors.list[0];
-
-          // Define a cor primária
-          if (settingsColors.primaryColor) {
-            setPrimaryColor(settingsColors.primaryColor);
-          }
-          // Define a cor secundária
-          if (settingsColors.secudaryColor) {
-            setsecudaryColor(settingsColors.secudaryColor);
-          }
-          // Define a cor do ícone Mui
-          if (settingsColors.muiIconColor) {
-            setMuiIconColor(settingsColors.muiIconColor);
-          }
-          // Define a cor do texto Mui
-          if (settingsColors.textMuiColor) {
-            setTextMuiColor(settingsColors.textMuiColor);
-          }
+          setPrimaryColor(settingsColors.primaryColor || '#FFFFFF');
+          setSecudaryColor(settingsColors.secudaryColor || '#FFFFFF');
+          setMuiIconColor(settingsColors.muiIconColor || '#FFFFFF');
+          setTextMuiColor(settingsColors.textMuiColor || '#FFFFFF');
         }
       } else {
         console.error('Erro ao buscar as configurações de cores:', responseColors.statusText);
@@ -142,60 +110,51 @@ const checkContractSignature = async () => {
     }
   };
 
+// Função para ativar o contrato
+const activateContract = async () => {
+  try {
+    console.log('ID do contrato enviado para ativação:', idContrato);
+    if (idContrato) {
+      const response = await axios.get(`https://www.appmax.nexusnerds.com.br/ativar-contrato-cliente?id_contrato=${idContrato}`);
+      if (response.data.success) {
+        setShowSignaturePopup(false); // Esconde o popup de assinatura
+        setShowSuccessModal(true); // Mostra o modal de sucesso
+        setIsActivated(true); // Atualiza o estado de ativação para true
+
+        // Atualiza o banco de dados para marcar o contrato como ativado
+        await axios.post('https://www.db.app.nexusnerds.com.br/atualizar-contrato', {
+          id_contrato: idContrato,
+          is_activated: true, // Envia para o backend o valor atualizado de ativação
+        });
+        
+        console.log('Contrato atualizado com sucesso no banco de dados.');
+      } else {
+        alert('Erro ao ativar o contrato.');
+      }
+    } else {
+      console.warn('ID do contrato está indefinido. Verifique o processo de obtenção do contrato.');
+    }
+  } catch (error) {
+    console.error('Erro ao ativar o contrato:', error);
+    alert('Erro ao ativar o contrato.');
+  }
+};
+
+
+  // useEffect para buscar cores e módulos ao montar o componente
   useEffect(() => {
-    // Executa a função para buscar as cores assim que o componente é montado
     fetchPrimaryColor();
-
-    // Intervalo para atualizar as cores a cada 5 segundos
-    const intervalId = setInterval(fetchPrimaryColor, 5000);
-
-    // Limpa o intervalo quando o componente for desmontado
-    return () => clearInterval(intervalId);
+    fetchModules();
   }, []);
 
-
-
-  // Função para ativar o contrato
-  const activateContract = async () => {
-    try {
-      console.log('ID do contrato enviado para ativação:', idContrato);
-      if (idContrato) {
-        const response = await axios.get(`https://www.appmax.nexusnerds.com.br/ativar-contrato-cliente?id_contrato=${idContrato}`);
-        if (response.data.success) {
-          setShowSignaturePopup(false); // Esconde o popup de assinatura
-          setShowSuccessModal(true); // Mostra o modal de sucesso
-          setIsActivated(true); // Atualiza o estado de ativação para true
-
-          // Atualiza o banco de dados para marcar o contrato como ativado
-          await axios.post('https://www.db.app.nexusnerds.com.br/atualizar-contrato', {
-            id_contrato: idContrato,
-            is_activated: true,
-          });
-          console.log('Contrato atualizado com sucesso no banco de dados.');
-        } else {
-          alert('Erro ao ativar o contrato.');
-        }
-      } else {
-        console.warn('ID do contrato está indefinido. Verifique o processo de obtenção do contrato.');
-      }
-    } catch (error) {
-      console.error('Erro ao ativar o contrato:', error);
-      alert('Erro ao ativar o contrato.');
-    }
-  };
-
-
+  // useEffect para verificar a assinatura do contrato quando módulos e dados do cliente mudarem
   useEffect(() => {
-    if (dadosCliente) {
+    if (modules?.Modulo_AtivacaoContrato && dadosCliente?.id_cliente) {
+      console.log('Iniciando verificação de assinatura do contrato com id_cliente:', dadosCliente.id_cliente);
       checkContractSignature();
     }
-  }, [dadosCliente]);
+  }, [modules.Modulo_AtivacaoContrato, dadosCliente]);
 
-  useEffect(() => {
-    fetchModules();
-    const intervalId = setInterval(fetchModules, 5000);
-    return () => clearInterval(intervalId);
-  }, []);
 
   return (
     <Box sx={{ width: '100%', overflowX: 'hidden', paddingBottom: '100px' }}>
