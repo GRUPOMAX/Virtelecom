@@ -176,10 +176,10 @@ const activateContract = async () => {
 
       {/* Popup de Assinatura */}
       <Dialog open={showSignaturePopup} onClose={() => setShowSignaturePopup(false)}>
-        <DialogTitle>Assinatura de Contrato</DialogTitle>
+        <DialogTitle>Termos de Ativação de Contrato</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Você precisa assinar o contrato para ativar o serviço.
+            Você precisa aceitar os termos do contrato para ativar o serviço.
           </DialogContentText>
           <DialogContentText>
             Para ativar o contrato, basta apenas clicar em "Ativar".
@@ -198,7 +198,7 @@ const activateContract = async () => {
             style={{ backgroundColor: primaryColor, color: "#FFFFFF" }} // Cor de fundo e texto para "Ativar"
             variant="contained"
           >
-            Assinar
+            Ativar
           </Button>
 
         </DialogActions>
