@@ -159,78 +159,81 @@ function Login({ onLogin }) {
   }, [navigate]);
   
 
-const handleSubmit = async (event) => {
-  event.preventDefault();
-  setErro('');
-  setLoading(true);
-  setIsModalOpen(true); // Abre o modal de carregamento
-
-  const documentoFormatado = documento.trim();
-
-  // Verifica se o documento tem tamanho correto para CPF ou CNPJ
-  if (documentoFormatado.length !== 14 && documentoFormatado.length !== 18) {
-    setErro('CPF ou CNPJ inválido.');
-    setLoading(false);
-    setIsModalOpen(false); // Fecha o modal em caso de erro
-    return;
-  }
-
-  try {
-    // Verifica se o cliente já existe no banco de dados
-    const response = await fetch('https://www.db.app.nexusnerds.com.br/buscar-cliente', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ cnpj_cpf: documentoFormatado }),
-    });
-
-    if (response.ok) {
-      // Cliente encontrado, fazer login
-      const data = await response.json();
-
-      localStorage.setItem('cnpj_cpf', documentoFormatado);
-      localStorage.setItem('dadosCliente', JSON.stringify(data));
-      setClienteInfo(data);
-      console.log("Cliente encontrado, fazendo login:", data);
-
-      onLogin(data);
-      navigate('/home');
-    } else {
-      // Cliente não encontrado, cadastrar o cliente
-      console.log("Cliente não encontrado, cadastrando novo cliente...");
-
-      const cadastroResponse = await fetch('https://www.db.app.nexusnerds.com.br/cadastrar-cliente', {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setErro('');
+    setLoading(true);
+    setIsModalOpen(true); // Abre o modal de carregamento
+  
+    const documentoFormatado = documento.trim();
+  
+    // Verifica se o documento tem tamanho correto para CPF ou CNPJ
+    if (documentoFormatado.length !== 14 && documentoFormatado.length !== 18) {
+      setErro('CPF ou CNPJ inválido.');
+      setLoading(false);
+      setIsModalOpen(false); // Fecha o modal em caso de erro
+      return;
+    }
+  
+    const headers = new Headers();
+    headers.append("Cache-Control", "no-cache, no-store, must-revalidate");
+    headers.append("Pragma", "no-cache");
+    headers.append("Expires", "0");
+    headers.append("Content-Type", "application/json");
+  
+    try {
+      // Verifica se o cliente já existe no banco de dados
+      const response = await fetch('https://www.db.app.nexusnerds.com.br/buscar-cliente', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: headers,
         body: JSON.stringify({ cnpj_cpf: documentoFormatado }),
       });
-
-      if (cadastroResponse.ok) {
-        const novoCliente = await cadastroResponse.json();
-        console.log("Novo cliente cadastrado:", novoCliente);
-
+  
+      if (response.ok) {
+        // Cliente encontrado, fazer login
+        const data = await response.json();
+  
         localStorage.setItem('cnpj_cpf', documentoFormatado);
-        localStorage.setItem('dadosCliente', JSON.stringify(novoCliente));
-        setClienteInfo(novoCliente);
-
-        onLogin(novoCliente);
+        localStorage.setItem('dadosCliente', JSON.stringify(data));
+        setClienteInfo(data);
+        console.log("Cliente encontrado, fazendo login:", data);
+  
+        onLogin(data);
         navigate('/home');
       } else {
-        const errorCadastro = await cadastroResponse.json();
-        setErro(errorCadastro.message || 'Erro ao cadastrar novo cliente.');
+        // Cliente não encontrado, cadastrar o cliente
+        console.log("Cliente não encontrado, cadastrando novo cliente...");
+  
+        const cadastroResponse = await fetch('https://www.db.app.nexusnerds.com.br/cadastrar-cliente', {
+          method: 'POST',
+          headers: headers,
+          body: JSON.stringify({ cnpj_cpf: documentoFormatado }),
+        });
+  
+        if (cadastroResponse.ok) {
+          const novoCliente = await cadastroResponse.json();
+          console.log("Novo cliente cadastrado:", novoCliente);
+  
+          localStorage.setItem('cnpj_cpf', documentoFormatado);
+          localStorage.setItem('dadosCliente', JSON.stringify(novoCliente));
+          setClienteInfo(novoCliente);
+  
+          onLogin(novoCliente);
+          navigate('/home');
+        } else {
+          const errorCadastro = await cadastroResponse.json();
+          setErro(errorCadastro.message || 'Erro ao cadastrar novo cliente.');
+        }
       }
+    } catch (error) {
+      console.error('Erro ao verificar ou cadastrar o cliente:', error.message);
+      setErro(`Erro ao verificar ou cadastrar o cliente: ${error.message}`);
+    } finally {
+      setLoading(false);
+      setIsModalOpen(false); // Fecha o modal após o processamento
     }
-  } catch (error) {
-    console.error('Erro ao verificar ou cadastrar o cliente:', error.message);
-    setErro(`Erro ao verificar ou cadastrar o cliente: ${error.message}`);
-  } finally {
-    setLoading(false);
-    setIsModalOpen(false); // Fecha o modal após o processamento
-  }
-};
+  };
+  
 
 
   return (
