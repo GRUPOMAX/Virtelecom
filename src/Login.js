@@ -306,7 +306,7 @@ function Login({ onLogin }) {
           >
             Continuar
           </Button>
-
+            {/*
           <Button
             variant="outlined"
             fullWidth
@@ -326,7 +326,7 @@ function Login({ onLogin }) {
             onClick={() => console.log('Cadastrar-se agora!')}
           >
             Cadastre-se agora!
-          </Button>
+          </Button>*/}
         </form>
       </Container>
 
