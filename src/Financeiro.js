@@ -114,15 +114,6 @@ function Financeiro({ dados }) {
 
 
 
-
-
-    // Filtra a "Próxima Fatura" (aquela que está no próximo mês) das outras faturas
-  const proximaFatura = proximasFaturas.find((fatura) => verificarStatusFatura(fatura.data_vencimento) === "Próxima Fatura");
-  const outrasFaturas = proximasFaturas.filter((fatura) => verificarStatusFatura(fatura.data_vencimento) !== "Próxima Fatura");
-
-
-
-
   // Mapeamento dos ícones disponíveis
     const iconsMap = {
       BroadcastOnHomeIcon: <BroadcastOnHomeIcon />,
@@ -618,7 +609,9 @@ useEffect(() => {
 
 
 
-
+    // Filtra a "Próxima Fatura" (aquela que está no próximo mês) das outras faturas
+    const proximaFatura = proximasFaturas.find((fatura) => verificarStatusFatura(fatura.data_vencimento) === "Próxima Fatura");
+    const outrasFaturas = proximasFaturas.filter((fatura) => verificarStatusFatura(fatura.data_vencimento) !== "Próxima Fatura");
 
 
   
@@ -632,9 +625,11 @@ useEffect(() => {
 
         {/* Outras Faturas (exceto a próxima) */}
         {outrasFaturas.length > 0 ? (
-          outrasFaturas.map((fatura, index) => (
+          [...new Map(
+            outrasFaturas.map(fatura => [fatura.id, fatura]) // Remove duplicatas
+          ).values()].map((fatura, index) => (
             <Paper
-              key={index}
+              key={fatura.id || index} // Garante chaves únicas
               elevation={3}
               sx={{
                 borderRadius: '20px',
@@ -757,180 +752,38 @@ useEffect(() => {
           ))
         ) : null}
 
-        {/* Próxima Fatura dentro do Collapse */}
-        {proximaFatura ? (
-          <>
+        {/* Botão de desbloqueio de confiança */}
+        {outrasFaturas.length > 0 && verificarSeBloqueado(outrasFaturas[0].data_vencimento) && (
+          <Tooltip
+            title={textDesbloqueio}
+            open={showTooltip}
+            disableHoverListener
+            arrow
+            placement="top"
+          >
             <Button
-              variant="outlined"
-              onClick={toggleProximaFatura}
-              sx={{ marginBottom: '20px', color: highlightColor || '#09DB05', borderColor: primaryColor || 'black' }}
+              variant="contained"
+              color="primary"
+              onClick={() => desbloqueioConfianca(idContrato)}
+              sx={{
+                position: 'fixed',
+                bottom: 80,
+                right: 20,
+                backgroundColor: primaryColor || '#09DB05',
+                color: highlightColor || '#FFF',
+                borderRadius: '50%',
+                minWidth: '50px',
+                minHeight: '50px',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+              }}
             >
-              {showProximaFatura ? "Esconder Próxima Fatura" : "Mostrar Próxima Fatura"}
+              {iconsMap[iconOpenDesConfiança] || (
+                <img src="URL_DO_ICONE_PADRAO" alt="Ícone de Desbloqueio de Confiança" />
+              )}
             </Button>
-
-            <Collapse in={showProximaFatura}>
-              <Paper
-                elevation={3}
-                sx={{
-                  borderRadius: '20px',
-                  padding: '15px',
-                  backgroundColor: cardBackgroundColor || '#F1F1F1',
-                  marginBottom: '20px',
-                }}
-              >
-                {/* Conteúdo da próxima fatura */}
-                <Grid container spacing={2} alignItems="center">
-                  <Grid item xs={6}>
-                    <Typography
-                      variant="h6"
-                      color={highlightColor || '#09DB05'}
-                      gutterBottom
-                    >
-                      {verificarStatusFatura(proximaFatura.data_vencimento)}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={6} style={{ textAlign: 'right' }}>
-                    <Typography variant="caption" color={highlightColor || '#09DB05'}>
-                      Vencimento
-                    </Typography>
-                    <Typography variant="body2" color={highlightColor || '#09DB05'}>
-                      {formatarDataBR(proximaFatura.data_vencimento)}
-                    </Typography>
-                  </Grid>
-                </Grid>
-
-                <Typography
-                  variant="h4"
-                  color={highlightColor || '#09DB05'}
-                  sx={{ fontWeight: 'bold', textAlign: 'center', marginTop: '10px' }}
-                >
-                  R$ {proximaFatura.valor_aberto}
-                </Typography>
-
-                <Grid
-                  container
-                  spacing={2}
-                  alignItems="center"
-                  justifyContent="center"
-                  sx={{ marginTop: '15px' }}
-                >
-                  {/* Botões e funcionalidades da próxima fatura */}
-                  <Grid item xs={4} style={{ textAlign: 'center' }}>
-                    <Button
-                      variant="text"
-                      color={highlightColor || '#09DB05'}
-                      sx={{ fontSize: '10px', display: 'flex', flexDirection: 'column' }}
-                      onClick={() => {
-                        setBoletoSelecionado(proximaFatura);
-                        setOpenConfirmModal(true);
-                      }}
-                    >
-                      <img
-                        src={iconeEnviarUrl || 'https://i.ibb.co/4W2FynC/seta-para-cima.png'}
-                        alt="Ícone Enviar"
-                        style={{ width: '24px' }}
-                      />
-                      <Typography
-                        variant="caption"
-                        color={highlightColor || '#09DB05'}
-                        sx={{ marginTop: '4px' }}
-                      >
-                        2ª VIA
-                      </Typography>
-                    </Button>
-                  </Grid>
-
-                  <Grid item xs={4} style={{ textAlign: 'center' }}>
-                    <Button
-                      variant="text"
-                      sx={{ color: 'black', fontSize: '10px', display: 'flex', flexDirection: 'column' }}
-                      onClick={() => {
-                        setBoletoSelecionado(proximaFatura);
-                        setOpenBoletoModal(true);
-                      }}
-                    >
-                      <img
-                        src={iconeBarrasUrl || 'https://i.ibb.co/MPcb9jn/codigo-de-barras.png'}
-                        alt="icone-barras"
-                        style={{ width: '24px' }}
-                      />
-                      <Typography
-                        variant="caption"
-                        color={highlightColor || '#09DB05'}
-                        sx={{ marginTop: '4px' }}
-                      >
-                        Baixar Boleto
-                      </Typography>
-                    </Button>
-                  </Grid>
-
-                  <Grid item xs={4} style={{ textAlign: 'center' }}>
-                    <Button
-                      variant="text"
-                      sx={{ color: 'black', fontSize: '10px', display: 'flex', flexDirection: 'column' }}
-                      onClick={() => {
-                        setBoletoSelecionado(proximaFatura);
-                        handleOpenModal(proximaFatura.id);
-                      }}
-                    >
-                      <img
-                        src={iconePixUrl || 'https://i.ibb.co/xLxNTgn/codigo-qr.png'}
-                        alt="icone-pix"
-                        style={{ width: '24px' }}
-                      />
-                      <Typography
-                        variant="caption"
-                        color={highlightColor || '#09DB05'}
-                        sx={{ marginTop: '4px' }}
-                      >
-                        PAGAR COM PIX
-                      </Typography>
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Paper>
-            </Collapse>
-          </>
-        ) : null}
-
-        {outrasFaturas.length === 0 && !proximaFatura && (
-          <img
-            src={backgroundUrl}
-            alt="Nenhum Atendimento"
-            style={{ width: '100%', height: 'auto', maxWidth: '400px' }}
-          />
+          </Tooltip>
         )}
 
-        {outrasFaturas.length > 0 && verificarSeBloqueado(outrasFaturas[0].data_vencimento) && (
-              <Tooltip
-                title={textDesbloqueio}
-                open={showTooltip}
-                disableHoverListener
-                arrow
-                placement="top"
-              >
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => desbloqueioConfianca(idContrato)}
-                  sx={{
-                    position: 'fixed',
-                    bottom: 80,
-                    right: 20,
-                    backgroundColor: primaryColor || '#09DB05',
-                    color: highlightColor || '#FFF',
-                    borderRadius: '50%',
-                    minWidth: '50px',
-                    minHeight: '50px',
-                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-                  }}
-                >
-                  {iconsMap[iconOpenDesConfiança] || (
-                    <img src="URL_DO_ICONE_PADRAO" alt="Ícone de Desbloqueio de Confiança" />
-                  )}
-                </Button>
-              </Tooltip>
-            )}
 
 
 
