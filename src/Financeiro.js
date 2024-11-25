@@ -314,29 +314,39 @@ function Financeiro({ dados }) {
       try {
         const dadosCliente = JSON.parse(storedData);
         console.log('Dados Cliente:', dadosCliente);
-
-        // Verificar se o id_contrato está presente
-        if (dadosCliente?.id_contrato) {
-          setIdContrato(dadosCliente.id_contrato);
+  
+        // Verificar o id_contrato no nível principal ou no array de contratos
+        let contratoValido = dadosCliente.id_contrato;
+        if (!contratoValido && dadosCliente.contratos && dadosCliente.contratos.length > 0) {
+          contratoValido = dadosCliente.contratos[0].id_contrato; // Usa o primeiro contrato do array
+          console.log('Contrato encontrado no array de contratos:', contratoValido);
+        }
+  
+        // Define o idContrato ou busca na API se necessário
+        if (contratoValido) {
+          setIdContrato(contratoValido);
         } else {
-          console.warn('ID do contrato não encontrado nos dados do cliente, tentando buscar pelo ID do cliente...');
-
+          console.warn('Nenhum ID de contrato encontrado, tentando buscar na API...');
+  
           // Fazer requisição para obter o id_contrato pelo id_cliente
           if (dadosCliente?.id_cliente) {
             try {
               const response = await axios.get('https://www.db.app.nexusnerds.com.br/contratos', {
-                params: { id_cliente: dadosCliente.id_cliente }
+                params: { id_cliente: dadosCliente.id_cliente },
               });
-
-              if (response.data && response.data.id_contrato) {
-                setIdContrato(response.data.id_contrato);
-                console.log('ID do contrato encontrado:', response.data.id_contrato);
+  
+              if (response.data && response.data.length > 0) {
+                const primeiroContrato = response.data[0].id_contrato; // Assume o primeiro contrato
+                setIdContrato(primeiroContrato);
+                console.log('ID do contrato encontrado na API:', primeiroContrato);
               } else {
-                console.warn('Contrato não encontrado para o cliente informado.');
+                console.warn('Nenhum contrato encontrado na API para o cliente informado.');
               }
             } catch (error) {
               console.error('Erro ao buscar o contrato pelo ID do cliente:', error);
             }
+          } else {
+            console.warn('ID do cliente não encontrado para buscar contratos.');
           }
         }
       } catch (error) {
@@ -346,6 +356,7 @@ function Financeiro({ dados }) {
       console.warn('Nenhum dado do cliente encontrado no localStorage.');
     }
   };
+  
 
   // Função para verificar se a fatura está atrasada há mais de 10 dias
   const verificarBloqueio = (dataVencimento) => {
@@ -363,6 +374,7 @@ function Financeiro({ dados }) {
   };
 
 const desbloqueioConfianca = async (idContrato) => {
+  console.log('Dados do localStorage:', localStorage.getItem('dadosCliente'));
   try {
     const response = await axios.post('https://www.appmax.nexusnerds.com.br/desbloqueio-confianca', { idContrato });
     console.log('Desbloqueio solicitado com sucesso:', response.data);
