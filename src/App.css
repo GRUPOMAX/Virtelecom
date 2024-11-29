@@ -219,9 +219,20 @@ header {
   overflow: hidden;
   list-style: none;
   padding: 0;
-  z-index: -1;
+  /*z-index: -1;*/
   display: block;
 }
+
+.swiper-wrapper-container {
+  position: relative;
+  z-index: -1; /* Coloca o wrapper abaixo */
+}
+
+.swiper {
+  position: relative;
+  z-index: 0; /* Mantém o Swiper funcional */
+}
+
 
 
 

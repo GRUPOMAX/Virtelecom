@@ -50,6 +50,7 @@ function Destaque() {
           fontSize: '14px',
           fontWeight: 'bold',
           marginBottom: '10px',
+          marginTop: '20px',
           textAlign: 'left',
           color: '#5b5b5b',
         }}
