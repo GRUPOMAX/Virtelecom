@@ -61,7 +61,7 @@ function Destaque() {
   }, []);
 
   return (
-    <Box sx={{ padding: '20px', textAlign: 'center' }}>
+    <Box sx={{ padding: '20px', textAlign: 'center', paddingBottom: '80px' }}>
       <Typography
         variant="h6"
         sx={{
@@ -74,14 +74,14 @@ function Destaque() {
       >
         Destaque
       </Typography>
-
+  
       <Swiper
         modules={[Autoplay]}
         autoplay={{ delay: 3500 }}
         loop={true}
         spaceBetween={10}
         slidesPerView={1}
-        style={{ width: '95%', padding: '10px', marginBottom: '50px' }}
+        style={{ width: '95%', padding: '10px', marginBottom: '20px' }}
       >
         {images.map((url, index) => (
           <SwiperSlide key={index}>
@@ -99,7 +99,7 @@ function Destaque() {
         ))}
       </Swiper>
     </Box>
-  );
+  );  
 }
 
 export default Destaque;
