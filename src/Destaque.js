@@ -27,33 +27,15 @@ function Destaque() {
 
         const data = await response.json();
 
-        // Filtrar e validar as imagens com dimensão 1920x1080
-        const filteredUrls = [];
-        for (const item of data.list) {
-          const url = item['DESTAQUES - URL'];
-          if (url) {
-            const img = new Image();
-            img.src = url;
-
-            // Validar dimensões ao carregar a imagem
-            await new Promise((resolve) => {
-              img.onload = () => {
-                if (img.width === 1920 && img.height === 1080) {
-                  filteredUrls.push(url);
-                }
-                resolve();
-              };
-            });
-          }
-        }
-
-        setImages(filteredUrls);
+        // Extrair URLs diretamente
+        const urls = data.list.map((item) => item['DESTAQUES - URL']);
+        setImages(urls.filter((url) => url)); // Remove URLs inválidas (nulas/undefined)
       } catch (error) {
         console.error('Erro ao buscar imagens:', error);
       }
     };
 
-    // Atualização em tempo real a cada 30 segundos
+    // Atualizar em tempo real a cada 30 segundos
     const interval = setInterval(fetchImages, 30000);
     fetchImages();
 
@@ -61,7 +43,7 @@ function Destaque() {
   }, []);
 
   return (
-    <Box sx={{ padding: '20px', textAlign: 'center', paddingBottom: '80px' }}>
+    <Box sx={{ padding: '20px', textAlign: 'center' }}>
       <Typography
         variant="h6"
         sx={{
@@ -74,14 +56,17 @@ function Destaque() {
       >
         Destaque
       </Typography>
-  
+
       <Swiper
         modules={[Autoplay]}
-        autoplay={{ delay: 3500 }}
+        autoplay={{
+          delay: 3500, // Tempo entre os slides (em milissegundos)
+          disableOnInteraction: false, // Continua após interação do usuário
+        }}
         loop={true}
         spaceBetween={10}
         slidesPerView={1}
-        style={{ width: '95%', padding: '10px', marginBottom: '20px' }}
+        style={{ width: '95%', padding: '10px', marginBottom: '50px' }}
       >
         {images.map((url, index) => (
           <SwiperSlide key={index}>
@@ -99,7 +84,7 @@ function Destaque() {
         ))}
       </Swiper>
     </Box>
-  );  
+  );
 }
 
 export default Destaque;
