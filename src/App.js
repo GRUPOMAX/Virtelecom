@@ -7,6 +7,7 @@ import CriarTicket  from './CriarTicket';
 import Planos from './Planos';
 import PlanoDetalhes from './PlanoDetalhes';
 import Financeiro from './Financeiro';
+import MinhaFatura from './MinhaFatura';
 import Duvidas from './Duvidas';
 import Perfil from './Perfil';
 import Footer from './Footer';
@@ -127,6 +128,7 @@ function App() {
           <Route path="/planos" element={<Planos />} />
           <Route path="/planos/:id" element={<PlanoDetalhes />} />
           <Route path="/financeiro" element={<Financeiro dados={dadosCliente} />} />
+          <Route path="/MinhaFatura" element={<MinhaFatura dados={dadosCliente} />} />        
           <Route path="/wifi" element={<MeuWifi dados={dadosCliente} />} />
           <Route path="/duvidas" element={<Duvidas />} />
           <Route path="/perfil" element={<Perfil />} />

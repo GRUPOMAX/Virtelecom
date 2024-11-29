@@ -59,6 +59,10 @@ function Financeiro({ dados }) {
 
 
 
+
+
+
+
   // Verifica se existe pelo menos um boleto
   const primeiroBoleto = dados?.boletos?.[0] || {};
 
