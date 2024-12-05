@@ -263,6 +263,7 @@ function Cadastro() {
       );
   
       alert('Cadastro realizado com sucesso!');
+      // Atualize o estado inicial
       setFormData({
         nomeCompleto: '',
         cpfCnpj: '',
@@ -279,6 +280,7 @@ function Cadastro() {
         complemento: '',
         referencia: '',
         planoContratado: '',
+        nomePlano: '', // Adicione esta chave
         dataVencimento: '',
         vendedor: '',
         coordenadas: { lat: null, lng: null },
@@ -498,24 +500,34 @@ function Cadastro() {
       case 2:
         return (
           <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                label="Plano Contratado"
-                name="planoContratado"
-                select
-                fullWidth
-                required
-                variant="outlined"
-                value={formData.planoContratado}
-                onChange={(e) => setFormData({ ...formData, planoContratado: e.target.value })}
-              >
-                {planos.map((plano) => (
-                  <MenuItem key={plano.id} value={plano.nome}>
-                    {plano.nome} - {plano.valor}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="Plano Contratado"
+                  name="planoContratado"
+                  select
+                  fullWidth
+                  required
+                  variant="outlined"
+                  value={formData.planoContratado} // Deve conter o nome do plano
+                  onChange={(e) => {
+                    const selectedPlano = planos.find(
+                      (plano) => plano.nome === e.target.value
+                    );
+                    setFormData({
+                      ...formData,
+                      planoContratado: selectedPlano ? selectedPlano.nome : '',
+                    });
+                  }}
+                >
+                  {planos.map((plano) => (
+                    <MenuItem key={plano.id} value={plano.nome}>
+                      {plano.nome} - {plano.valor}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+
+
             <Grid item xs={12}>
               <TextField
                 label="Data de Vencimento"

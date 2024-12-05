@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Dados do Cliente</title>
+   <style>
+      body {
+         font-family: "Arial Rounded MT Bold", Arial, sans-serif;
+         background-color: #eeeeee;
+      }
+      table {
+         width: 100%;
+         border-collapse: separate;
+         border-spacing: 0 6px; /* Espaço vertical entre as linhas da tabela */
+      }
+      th, td {
+         border: 1px solid #000;
+         padding: 5px; /* Ajuste do padding para dar mais espaço */
+      }
+      #tipo-pessoa-row {
+         border: 1px solid #000;
+      }
+      .space-between-rows {
+         height: 3px; /* Espaço de 3px entre as linhas */
+      }
+      /* Style for the Vendedor field */
+      #vendedor {
+         background-color: #10D21B; /* Green background color */
+         color: #ffffff; /* Text color */
+         font-weight: bold; /* Bold font */
+         padding: 5px;
+         margin: 10px auto;
+         text-align: center;
+         width: calc(100% - 10px); /* Set width to 100% minus the left and right margin */
+      }
+      /* Style for the banner image */
+      #banner-image {
+         width: 100%;
+         height: auto;
+      }
+   </style>
+</head>
+<body>
+<div style="width: 600px; margin: 0 auto; background-color: #FFF; padding: 0">
+   <div style="text-align: center; margin-bottom: 20px">
+      <img id="banner-image" src="https://i.ibb.co/YtZ0x9v/Novo.png" alt="Banner">
+   </div>
+   <div id="vendedor"><strong>Vendedor: {{ $('Webhook').item.json.body.vendedor }} </strong></div>
+   <div style="line-height: 1.5">
+      <div style="border: 2px solid #00cc00; border-radius: 10px; padding: 10px">
+         <table>
+            <tr>
+               <th colspan="2"><strong>DADOS PESSOAIS</strong></th>
+            </tr>
+            <tr>
+                <td><strong>Tipo de Pessoa:</strong></td>
+                <td>Física</td>
+            </tr>
+            <tr>
+                <td><strong>Nome Completo:</strong></td>
+                <td>{{ $('Webhook').item.json.body.nomeCompleto }}</td>
+            </tr>
+            <tr>
+                <td><strong>CPF/CNPJ:</strong></td>
+                <td>{{ $('Webhook').item.json.body.cpfCnpj }}</td>
+            </tr>
+            <tr>
+                <td><strong>RG:</strong></td>
+                <td>{{ $('Webhook').item.json.body.rg }}</td>
+            </tr>
+            <tr>
+                <td><strong>Data de Nascimento:</strong></td>
+                <td>{{ $('Webhook').item.json.body.dataNascimento }}</td>
+            </tr>
+            <tr>
+                <td><strong>E-mail:</strong></td>
+                <td>{{ $('Webhook').item.json.body.email }}</td>
+            </tr>
+            <tr>
+                <td><strong>Telefone 01:</strong></td>
+                <td>{{ $('Webhook').item.json.body.telefone1 }}</td>
+            </tr>
+            <tr>
+                <td><strong>Telefone 02:</strong></td>
+                <td>{{ $('Webhook').item.json.body.telefone2 }}</td>
+            </tr>
+            <tr>
+                <td><strong>Cidade:</strong></td>
+                <td>{{ $('Webhook').item.json.body.cidade }}</td>
+            </tr>
+            <tr>
+                <td><strong>Bairro:</strong></td>
+                <td>{{ $('Webhook').item.json.body.bairro }}</td>
+            </tr>
+            <tr>
+                <td><strong>Endereço Completo:</strong></td>
+                <td>{{ $('Webhook').item.json.body.endereco }}</td>
+            </tr>
+            <tr>
+                <td><strong>CEP:</strong></td>
+                <td>{{ $('Webhook').item.json.body.cep }}</td>
+            </tr>
+            <tr>
+                <td><strong>Número Residencial:</strong></td>
+                <td>{{ $('Webhook').item.json.body.numeroResidencial }}</td>
+            </tr>
+            <tr>
+                <td><strong>Complemento:</strong></td>
+                <td>{{ $('Webhook').item.json.body.complemento }}</td>
+            </tr>
+            <tr>
+                <td><strong>Referência:</strong></td>
+                <td>{{ $('Webhook').item.json.body.referencia }}</td>
+            </tr>
+            <tr>
+                <td><strong>Plano Contratado:</strong></td>
+                <td>{{ $('Webhook').item.json.body.planoContratado }}</td>
+            </tr>
+            <tr>
+                <td><strong>Nome Do Plano:</strong></td>
+                <td>{{ $('Webhook').item.json.body.nomePlano }}</td>
+            </tr>
+            <tr>
+                <td><strong>Data de Vencimento:</strong></td>
+                <td>{{ $('Webhook').item.json.body.dataVencimento }}</td>
+            </tr>
+         </table>
+      </div>
+   </div>
+   <div style="text-align: center; margin-top: 20px; padding: 20px 0; background-color: #10D21B; color: #ffffff; font-size: 12px">
+      <img src="https://i.ibb.co/JBmPsDr/Max-Fibra-2.png" alt="Logo Max Fibra" width="95" height="auto">
+      <p>Todos os direitos reservados a Max Fibra Ltda ©</p>
+      <p>Esta é uma mensagem formal da Max Fibra Ltda, Rua Antônio Gouveia, 210-274, Soteco Viana/ES</p>
+   </div>
+</div>
+</body>
+</html>
