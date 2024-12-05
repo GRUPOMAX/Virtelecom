@@ -13,6 +13,7 @@ import {
   Box,
 } from '@mui/material';
 import { styled } from '@mui/system';
+import { Modal } from '@mui/material';
 import axios from 'axios';
 import data from './data.json'; // Supondo que o arquivo JSON esteja no mesmo diretório
 import InputMask from 'react-input-mask';
@@ -66,6 +67,10 @@ function Cadastro() {
   const [errorTelefone, setErrorTelefone] = useState('')
 
   const steps = ['Informações Pessoais', 'Contatos e Endereço', 'Detalhes do Plano'];
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  
+
 
   const nocodbToken = 'rrRtn86Fi6dmzwKfOiNhzDsi4JGTxOAQSZ-xkMYN';
 
@@ -146,50 +151,108 @@ function Cadastro() {
   };
   
   const handleNext = () => {
+    const requiredFieldsStep1 = ['nomeCompleto', 'cpfCnpj', 'dataNascimento'];
+    const requiredFieldsStep2 = ['telefone1', 'telefone2', 'endereco', 'cep', 'numeroResidencial', 'bairro'];
+    const requiredFieldsStep3 = ['planoContratado', 'vendedor', 'dataVencimento'];
+  
+    const stepsRequiredFields = [requiredFieldsStep1, requiredFieldsStep2, requiredFieldsStep3];
+  
+    const fieldLabels = {
+      nomeCompleto: "Nome Completo",
+      cpfCnpj: "CPF/CNPJ",
+      rg: "RG",
+      dataNascimento: "Data de Nascimento",
+      telefone1: "Telefone 01",
+      telefone2: "Telefone 02",
+      email: "E-mail",
+      endereco: "Endereço Completo",
+      cep: "CEP",
+      numeroResidencial: "Número da Casa",
+      bairro: "Bairro",
+      referencia: "Ponto de Referência",
+      planoContratado: "Plano Contratado",
+      dataVencimento: "Data de Vencimento",
+      vendedor: "Vendedor",
+    };
+  
+    // Verifica os campos obrigatórios para a etapa atual
+    const currentRequiredFields = stepsRequiredFields[activeStep];
+  
+    for (const field of currentRequiredFields) {
+      if (!formData[field]) {
+        const fieldLabel = fieldLabels[field] || field; // Usa o nome amigável ou o nome técnico
+        setModalMessage(`O campo "${fieldLabel}" é obrigatório.`);
+        setModalOpen(true);
+        return; // Para o avanço se algum campo obrigatório estiver vazio
+      }
+    }
+  
     if (activeStep < steps.length - 1) {
       setActiveStep((prev) => prev + 1);
     } else {
       handleSubmit();
     }
   };
-
+  
+  
+  
   const handleBack = () => {
     if (activeStep > 0) {
       setActiveStep((prev) => prev - 1);
     }
   };
+  
 
   const handleSubmit = async () => {
+    // Validação de campos obrigatórios
+    const requiredFields = [
+      { name: 'nomeCompleto', label: 'Nome Completo' },
+      { name: 'cpfCnpj', label: 'CPF/CNPJ' },
+      { name: 'dataNascimento', label: 'Data de Nascimento' },
+      { name: 'telefone1', label: 'Telefone 1' },
+      { name: 'telefone2', label: 'Telefone 2' },
+      { name: 'endereco', label: 'Endereço Completo' },
+      { name: 'cep', label: 'CEP' },
+      { name: 'numeroResidencial', label: 'Número da Casa' },
+      { name: 'bairro', label: 'Bairro' },
+      { name: 'planoContratado', label: 'Plano Contratado' },
+      { name: 'vendedor', label: 'Vendedor' },
+      { name: 'dataVencimento', label: 'Data de Vencimento' },
+    ];
+  
+    for (const field of requiredFields) {
+      if (!formData[field.name]) {
+        alert(`O campo "${field.label}" é obrigatório.`);
+        return;
+      }
+    }
+
+
+    
+  
     const dataFormatada = formData.dataNascimento
       ? formData.dataNascimento.split('/').reverse().join('-')
       : '';
   
     try {
-      const planoSelecionado = planos.find((p) => p.nome === formData.planoContratado);
+      const planoSelecionado = planos.find(
+        (p) => p.nome === formData.planoContratado
+      );
   
       if (!planoSelecionado) {
         alert('Selecione um plano válido.');
         return;
       }
   
-      if (!formData.coordenadas || !formData.coordenadas.lat || !formData.coordenadas.lng) {
-        alert('Por favor, adicione sua localização antes de enviar.');
-        return;
-      }
-  
       const payload = {
         ...formData,
         planoContratado: planoSelecionado.id,
-        coordenadas: {
-          latitude: formData.coordenadas.lat,
-          longitude: formData.coordenadas.lng,
-        },
       };
   
       console.log('Payload enviado ao Webhook:', payload);
   
       await axios.post(
-        'https://n8n.nexusnerds.com.br/webhook-test/077381c6-a42f-4aca-8a56-174167cae26f',
+        'https://webhook.nexusnerds.com.br/webhook/077381c6-a42f-4aca-8a56-174167cae26f',
         payload,
         {
           headers: {
@@ -226,6 +289,7 @@ function Cadastro() {
       alert('Erro ao cadastrar. Verifique os dados e tente novamente.');
     }
   };
+  
   
   
   
@@ -531,7 +595,38 @@ function Cadastro() {
             {activeStep === steps.length - 1 ? 'Cadastrar' : 'Próximo'}
           </StyledButton>
         </Box>
+        
       </StyledPaper>
+      <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 300,
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+            textAlign: 'center',
+          }}
+        >
+          <Typography variant="h6" component="h2" gutterBottom>
+            Campos Obrigatórios
+          </Typography>
+          <Typography sx={{ mt: 2 }}>{modalMessage}</Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => setModalOpen(false)}
+            sx={{ mt: 3 }}
+          >
+            OK
+          </Button>
+        </Box>
+      </Modal>
+
     </Container>
   );
 }

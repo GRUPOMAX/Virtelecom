@@ -306,27 +306,27 @@ function Login({ onLogin }) {
           >
             Continuar
           </Button>
-            {/*
+
           <Button
-            variant="outlined"
-            fullWidth
-            className="register-button"
-            sx={{
-              color: '#fff',
-              borderColor: '#fff',
-              backgroundColor: 'transparent',
-              marginTop: '10px',
-              fontSize: '14px',
-              borderRadius: '8px',
-              '&:hover': {
+              variant="outlined"
+              fullWidth
+              className="register-button"
+              sx={{
+                color: '#fff',
                 borderColor: '#fff',
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              },
-            }}
-            onClick={() => console.log('Cadastrar-se agora!')}
-          >
-            Cadastre-se agora!
-          </Button>*/}
+                backgroundColor: 'transparent',
+                marginTop: '10px',
+                fontSize: '14px',
+                borderRadius: '8px',
+                '&:hover': {
+                  borderColor: '#fff',
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                },
+              }}
+              onClick={() => navigate('/cadastro')} // Altere '/cadastro' para a rota desejada
+            >
+              Cadastre-se agora!
+            </Button>
         </form>
       </Container>
 
