@@ -1,0 +1,31 @@
+{
+  "planos": [
+    {
+      "id": 30,
+      "nome": "Plano Turbo",
+      "valor": "R$ 99,90 / mês"
+    },
+    {
+      "id": 31,
+      "nome": "Plano Gold",
+      "valor": "R$ 129,90 / mês"
+    },
+    {
+      "id": 32,
+      "nome": "Plano Infinity",
+      "valor": "R$ 169,90 / mês"
+    }
+  ],
+  "datasVencimento": [
+    "05",
+    "10",
+    "20"
+  ],
+  "vendedores": [
+    "Alexsandra Morais",
+    "Fabio Morais",
+    "Tatiara Kister",
+    "Jamille Amaral",
+    "Leticia Azeredo"
+  ]
+}
