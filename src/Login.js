@@ -325,7 +325,7 @@ function Login({ onLogin }) {
               }}
               onClick={() => navigate('/cadastro')} // Altere '/cadastro' para a rota desejada
             >
-              Cadastre-se agora!
+              Contrate Agora!
             </Button>
         </form>
       </Container>
