@@ -71,6 +71,9 @@ function Cadastro() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [successModalOpen, setSuccessModalOpen] = useState(false);
+  const [errorTelefone1, setErrorTelefone1] = useState('');
+  const [errorTelefone2, setErrorTelefone2] = useState('');
+
 
   
   
@@ -374,29 +377,68 @@ function Cadastro() {
         return (
           <Grid container spacing={2}>
               <Grid item xs={6}>
-                <TextField
-                  label="Telefone 01"
-                  name="telefone1"
-                  fullWidth
-                  variant="outlined"
+                <InputMask
+                  mask="(99) 99999-9999"
                   value={formData.telefone1}
-                  onChange={handleInputChange}
-                  error={!!errorTelefone} // Adiciona estado de erro
-                  helperText={errorTelefone} // Exibe a mensagem de erro
-                />
+                  onChange={(e) => {
+                    const telefone = e.target.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+                    setFormData((prev) => ({ ...prev, telefone1: telefone }));
+
+                    // Validação para evitar números iguais
+                    if (telefone === formData.telefone2) {
+                      setErrorTelefone1('Os telefones não podem ser iguais.');
+                    } else {
+                      setErrorTelefone1(''); // Limpa erro
+                      setErrorTelefone2(''); // Limpa erro no outro campo, se necessário
+                    }
+                  }}
+                >
+                  {(inputProps) => (
+                    <TextField
+                      {...inputProps}
+                      label="Telefone 01"
+                      name="telefone1"
+                      fullWidth
+                      variant="outlined"
+                      error={!!errorTelefone1}
+                      helperText={errorTelefone1}
+                    />
+                  )}
+                </InputMask>
               </Grid>
+
               <Grid item xs={6}>
-                <TextField
-                  label="Telefone 02"
-                  name="telefone2"
-                  fullWidth
-                  variant="outlined"
+                <InputMask
+                  mask="(99) 99999-9999"
                   value={formData.telefone2}
-                  onChange={handleInputChange}
-                  error={!!errorTelefone} // Adiciona estado de erro
-                  helperText={errorTelefone} // Exibe a mensagem de erro
-                />
+                  onChange={(e) => {
+                    const telefone = e.target.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+                    setFormData((prev) => ({ ...prev, telefone2: telefone }));
+
+                    // Validação para evitar números iguais
+                    if (telefone === formData.telefone1) {
+                      setErrorTelefone2('Os telefones não podem ser iguais.');
+                    } else {
+                      setErrorTelefone2(''); // Limpa erro
+                      setErrorTelefone1(''); // Limpa erro no outro campo, se necessário
+                    }
+                  }}
+                >
+                  {(inputProps) => (
+                    <TextField
+                      {...inputProps}
+                      label="Telefone 02"
+                      name="telefone2"
+                      fullWidth
+                      variant="outlined"
+                      error={!!errorTelefone2}
+                      helperText={errorTelefone2}
+                    />
+                  )}
+                </InputMask>
               </Grid>
+
+
             <Grid item xs={12}>
               <TextField
                 label="E-mail"
