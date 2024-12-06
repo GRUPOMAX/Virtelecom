@@ -20,6 +20,7 @@ import InputMask from 'react-input-mask';
 import usePlacesAutocomplete, { getGeocode, getLatLng } from "use-places-autocomplete";
 import Autocomplete from "react-google-autocomplete";
 import LocationPicker from "./LocationPicker";
+import { FormControlLabel, Checkbox } from '@mui/material';
 
 
 
@@ -69,6 +70,9 @@ function Cadastro() {
   const steps = ['Informações Pessoais', 'Contatos e Endereço', 'Detalhes do Plano'];
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+  const [successModalOpen, setSuccessModalOpen] = useState(false);
+
+  
   
 
 
@@ -204,7 +208,6 @@ function Cadastro() {
   
 
   const handleSubmit = async () => {
-    // Validação de campos obrigatórios
     const requiredFields = [
       { name: 'nomeCompleto', label: 'Nome Completo' },
       { name: 'cpfCnpj', label: 'CPF/CNPJ' },
@@ -226,9 +229,6 @@ function Cadastro() {
         return;
       }
     }
-
-
-    
   
     const dataFormatada = formData.dataNascimento
       ? formData.dataNascimento.split('/').reverse().join('-')
@@ -244,9 +244,19 @@ function Cadastro() {
         return;
       }
   
+      // Determine o valor da casa (Própria ou Alugada)
+      let tipoCasa = '';
+      if (formData.casaPropria) {
+        tipoCasa = 'Casa Própria';
+      } else if (formData.casaAlugada) {
+        tipoCasa = 'Casa Alugada';
+      }
+  
       const payload = {
         ...formData,
         planoContratado: planoSelecionado.id,
+        nomePlano: planoSelecionado.nome, // Inclui o nome do plano no payload
+        tipoCasa, // Adiciona o valor do tipo de casa
       };
   
       console.log('Payload enviado ao Webhook:', payload);
@@ -262,8 +272,10 @@ function Cadastro() {
         }
       );
   
-      alert('Cadastro realizado com sucesso!');
-      // Atualize o estado inicial
+
+        // Exibir modal de sucesso
+      setSuccessModalOpen(true);
+
       setFormData({
         nomeCompleto: '',
         cpfCnpj: '',
@@ -280,9 +292,11 @@ function Cadastro() {
         complemento: '',
         referencia: '',
         planoContratado: '',
-        nomePlano: '', // Adicione esta chave
+        nomePlano: '', // Adicionado
         dataVencimento: '',
         vendedor: '',
+        casaPropria: false, // Adicionado
+        casaAlugada: false, // Adicionado
         coordenadas: { lat: null, lng: null },
       });
       setActiveStep(0);
@@ -291,6 +305,7 @@ function Cadastro() {
       alert('Erro ao cadastrar. Verifique os dados e tente novamente.');
     }
   };
+  
   
   
   
@@ -485,6 +500,32 @@ function Cadastro() {
               />
             </Grid>
             <Grid item xs={12}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={formData.casaPropria}
+                      onChange={(e) =>
+                        setFormData({ ...formData, casaPropria: e.target.checked, casaAlugada: !e.target.checked })
+                      }
+                    />
+                  }
+                  label="Casa Própria"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={formData.casaAlugada}
+                      onChange={(e) =>
+                        setFormData({ ...formData, casaAlugada: e.target.checked, casaPropria: !e.target.checked })
+                      }
+                    />
+                  }
+                  label="Casa Alugada"
+                />
+              </Grid>
+
+                  {/*
+            <Grid item xs={12}>
               <LocationPicker
                 onSave={(coords) => {
                   setFormData((prevState) => ({
@@ -494,6 +535,7 @@ function Cadastro() {
                 }}
               />
             </Grid>
+            */}
 
           </Grid>
         );
@@ -638,6 +680,42 @@ function Cadastro() {
           </Button>
         </Box>
       </Modal>
+      <Modal
+          open={successModalOpen}
+          onClose={() => setSuccessModalOpen(false)}
+          aria-labelledby="success-modal-title"
+          aria-describedby="success-modal-description"
+        >
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: 400,
+              bgcolor: 'background.paper',
+              boxShadow: 24,
+              p: 4,
+              borderRadius: 2,
+            }}
+          >
+            <Typography id="success-modal-title" variant="h6" component="h2" textAlign="center">
+              Cadastro Realizado com Sucesso!
+            </Typography>
+            <Typography id="success-modal-description" sx={{ mt: 2, textAlign: 'center' }}>
+              Seu cadastro será analisado e nossa equipe entrará em contato em breve. Obrigado!
+            </Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setSuccessModalOpen(false)}
+              sx={{ mt: 3, display: 'block', mx: 'auto' }}
+            >
+              Fechar
+            </Button>
+          </Box>
+        </Modal>
+
 
     </Container>
   );

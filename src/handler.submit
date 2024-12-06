@@ -1,0 +1,90 @@
+  const handleSubmit = async () => {
+    // Validação de campos obrigatórios
+    const requiredFields = [
+      { name: 'nomeCompleto', label: 'Nome Completo' },
+      { name: 'cpfCnpj', label: 'CPF/CNPJ' },
+      { name: 'dataNascimento', label: 'Data de Nascimento' },
+      { name: 'telefone1', label: 'Telefone 1' },
+      { name: 'telefone2', label: 'Telefone 2' },
+      { name: 'endereco', label: 'Endereço Completo' },
+      { name: 'cep', label: 'CEP' },
+      { name: 'numeroResidencial', label: 'Número da Casa' },
+      { name: 'bairro', label: 'Bairro' },
+      { name: 'planoContratado', label: 'Plano Contratado' },
+      { name: 'vendedor', label: 'Vendedor' },
+      { name: 'dataVencimento', label: 'Data de Vencimento' },
+    ];
+  
+    for (const field of requiredFields) {
+      if (!formData[field.name]) {
+        alert(`O campo "${field.label}" é obrigatório.`);
+        return;
+      }
+    }
+
+
+    
+  
+    const dataFormatada = formData.dataNascimento
+      ? formData.dataNascimento.split('/').reverse().join('-')
+      : '';
+  
+    try {
+      const planoSelecionado = planos.find(
+        (p) => p.nome === formData.planoContratado
+      );
+  
+      if (!planoSelecionado) {
+        alert('Selecione um plano válido.');
+        return;
+      }
+  
+      const payload = {
+        ...formData,
+        planoContratado: planoSelecionado.id,
+      };
+  
+      console.log('Payload enviado ao Webhook:', payload);
+  
+      await axios.post(
+        'https://webhook.nexusnerds.com.br/webhook/077381c6-a42f-4aca-8a56-174167cae26f',
+        payload,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'xc-token': nocodbToken,
+          },
+        }
+      );
+  
+      alert('Cadastro realizado com sucesso!');
+      // Atualize o estado inicial
+      setFormData({
+        nomeCompleto: '',
+        cpfCnpj: '',
+        rg: '',
+        dataNascimento: '',
+        email: '',
+        telefone1: '',
+        telefone2: '',
+        cidade: '',
+        bairro: '',
+        endereco: '',
+        cep: '',
+        numeroResidencial: '',
+        complemento: '',
+        referencia: '',
+        planoContratado: '',
+        nomePlano: '', // Nome do plano selecionado
+        dataVencimento: '',
+        vendedor: '',
+        casaPropria: false, // Adicionado
+        casaAlugada: false, // Adicionado
+        coordenadas: { lat: null, lng: null },
+      });      
+      setActiveStep(0);
+    } catch (error) {
+      console.error('Erro ao enviar cadastro:', error);
+      alert('Erro ao cadastrar. Verifique os dados e tente novamente.');
+    }
+  };

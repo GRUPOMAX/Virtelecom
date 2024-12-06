@@ -106,15 +106,15 @@
                 <td>{{ $('Webhook').item.json.body.numeroResidencial }}</td>
             </tr>
             <tr>
-                <td><strong>Complemento:</strong></td>
-                <td>{{ $('Webhook').item.json.body.complemento }}</td>
-            </tr>
-            <tr>
                 <td><strong>Referência:</strong></td>
                 <td>{{ $('Webhook').item.json.body.referencia }}</td>
             </tr>
             <tr>
-                <td><strong>Plano Contratado:</strong></td>
+                <td><strong>Tipo de Casa:</strong></td>
+                <td>{{ $('Webhook').item.json.body.tipoCasa }}</td>
+            </tr>
+            <tr>
+                <td><strong>ID do Plano IXC:</strong></td>
                 <td>{{ $('Webhook').item.json.body.planoContratado }}</td>
             </tr>
             <tr>
