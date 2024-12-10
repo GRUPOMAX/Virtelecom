@@ -78,6 +78,8 @@ function Financeiro({ dados }) {
   const idBoleto = primeiroBoleto?.id || ''; // Pegando o id do primeiro boleto
 
 
+  const faturasOrdenadas = dados?.boletos?.sort((a, b) => new Date(a.data_vencimento) - new Date(b.data_vencimento)) || [];
+  const proximasFaturas = faturasOrdenadas.slice(0, 2); // Pegando as duas primeiras faturas mais próximas
 
   // Defina os estados para armazenar as cores
   const [primaryColor, setPrimaryColor] = useState('#000'); // Cor padrão inicial
@@ -606,78 +608,14 @@ useEffect(() => {
 
 
 
-// Função para filtrar as faturas
-const hoje = new Date();
-
-// Ordena todas as faturas por data de vencimento
-const faturasOrdenadas = dados?.boletos
-  ?.map((fatura) => ({
-    ...fatura,
-    valor_aberto: parseFloat(fatura.valor_aberto), // Converte valor_aberto para número
-  }))
-  .sort((a, b) => new Date(a.data_vencimento) - new Date(b.data_vencimento)) || [];
-
-console.log("Faturas Ordenadas:", faturasOrdenadas);
-
-// Faturas atrasadas
-const faturasAtrasadas = [
-  ...new Map(
-    faturasOrdenadas
-      .filter((fatura) => new Date(fatura.data_vencimento) < hoje) // Apenas vencidas
-      .map((fatura) => [fatura.id, fatura]) // Remove duplicados
-  ).values(),
-];
-
-// Próxima fatura (a menor data de vencimento no futuro)
-const proximaFatura = faturasOrdenadas.find(
-  (fatura) => new Date(fatura.data_vencimento) >= hoje
-);
-
-// Outras faturas (sem a próxima fatura e atrasadas)
-const outrasFaturas = [
-  ...new Map(
-    faturasOrdenadas
-      .filter(
-        (fatura) =>
-          !faturasAtrasadas.some((atrasada) => atrasada.id === fatura.id) &&
-          fatura.id !== proximaFatura?.id
-      ) // Exclui atrasadas e a próxima fatura
-      .map((fatura) => [fatura.id, fatura])
-  ).values(),
-];
-
-console.log("Faturas Atrasadas:", faturasAtrasadas);
-console.log("Próxima Fatura:", proximaFatura);
-console.log("Outras Faturas:", outrasFaturas);
-
-  
 
 
 
 
-      const renderButton = ({ icon, label, onClick }) => (
-        <Grid item xs={4} style={{ textAlign: 'center' }}>
-          <Button
-            variant="text"
-            sx={{
-              fontSize: '10px',
-              display: 'flex',
-              flexDirection: 'column',
-              color: highlightColor || '#09DB05',
-            }}
-            onClick={onClick}
-          >
-            <img src={icon} alt={label} style={{ width: '24px' }} />
-            <Typography
-              variant="caption"
-              sx={{ marginTop: '4px' }}
-            >
-              {label}
-            </Typography>
-          </Button>
-        </Grid>
-      );
-      
+
+    // Filtra a "Próxima Fatura" (aquela que está no próximo mês) das outras faturas
+    const proximaFatura = proximasFaturas.find((fatura) => verificarStatusFatura(fatura.data_vencimento) === "Próxima Fatura");
+    const outrasFaturas = proximasFaturas.filter((fatura) => verificarStatusFatura(fatura.data_vencimento) !== "Próxima Fatura");
 
 
   
@@ -689,86 +627,13 @@ console.log("Outras Faturas:", outrasFaturas);
         Minhas Faturas
       </Typography>
 
-
-
-
-          {/* Faturas Atrasadas */}
-          {faturasAtrasadas.length > 0 && (
-              <>
-                <Typography variant="h6" gutterBottom sx={{ color: highlightColor || '#09DB05' , marginTop: '20px' }}>
-                  Faturas Atrasadas
-                </Typography>
-                {faturasAtrasadas.map((fatura) => (
-                  <Paper
-                    key={fatura.id}
-                    elevation={3}
-                    sx={{
-                      borderRadius: '20px',
-                      padding: '15px',
-                      backgroundColor: '#FFEEEE',
-                      marginBottom: '20px',
-                    }}
-                  >
-                    <Typography variant="h6" color={highlightColor || '#09DB05'} gutterBottom>
-                      Atrasada
-                    </Typography>
-                    <Typography variant="caption" color={highlightColor || '#09DB05'}>
-                      Vencimento
-                    </Typography>
-                    <Typography variant="body2" color={highlightColor || '#09DB05'}>
-                      {formatarDataBR(fatura.data_vencimento)}
-                    </Typography>
-                    <Typography
-                      variant="h4"
-                      color={highlightColor || '#09DB05'}
-                      sx={{ fontWeight: 'bold', textAlign: 'center', marginTop: '10px' }}
-                    >
-                      R$ {fatura.valor_aberto.toFixed(2).replace('.', ',')}
-                    </Typography>
-
-                    {/* Botões de ação */}
-                    <Grid
-                      container
-                      spacing={2}
-                      alignItems="center"
-                      justifyContent="center"
-                      sx={{ marginTop: '15px' }}
-                    >
-                      {renderButton({
-                        icon: iconeEnviarUrl || 'https://i.ibb.co/4W2FynC/seta-para-cima.png',
-                        label: '2ª VIA',
-                        onClick: () => {
-                          setBoletoSelecionado(fatura);
-                          setOpenConfirmModal(true);
-                        },
-                      })}
-                      {renderButton({
-                        icon: iconeBarrasUrl || 'https://i.ibb.co/MPcb9jn/codigo-de-barras.png',
-                        label: 'Baixar Boleto',
-                        onClick: () => {
-                          setBoletoSelecionado(fatura);
-                          setOpenBoletoModal(true);
-                        },
-                      })}
-                      {renderButton({
-                        icon: iconePixUrl || 'https://i.ibb.co/xLxNTgn/codigo-qr.png',
-                        label: 'PAGAR COM PIX',
-                        onClick: () => {
-                          setBoletoSelecionado(fatura);
-                          handleOpenModal(fatura.id);
-                        },
-                      })}
-                    </Grid>
-                  </Paper>
-                ))}
-              </>
-            )}
-
-          
-          {/* Próxima Fatura */}
-          {proximaFatura && (
+        {/* Outras Faturas (exceto a próxima) */}
+        {outrasFaturas.length > 0 ? (
+          [...new Map(
+            outrasFaturas.map(fatura => [fatura.id, fatura]) // Remove duplicatas
+          ).values()].map((fatura, index) => (
             <Paper
-              key={proximaFatura.id}
+              key={fatura.id || index} // Garante chaves únicas
               elevation={3}
               sx={{
                 borderRadius: '20px',
@@ -777,24 +642,35 @@ console.log("Outras Faturas:", outrasFaturas);
                 marginBottom: '20px',
               }}
             >
-              <Typography variant="h6" color={highlightColor || '#09DB05'} gutterBottom>
-                {verificarStatusFatura(proximaFatura.data_vencimento)}
-              </Typography>
-              <Typography variant="caption" color={highlightColor || '#09DB05'}>
-                Vencimento
-              </Typography>
-              <Typography variant="body2" color={highlightColor || '#09DB05'}>
-                {formatarDataBR(proximaFatura.data_vencimento)}
-              </Typography>
+              {/* Conteúdo da fatura */}
+              <Grid container spacing={2} alignItems="center">
+                <Grid item xs={6}>
+                  <Typography
+                    variant="h6"
+                    color={highlightColor || '#09DB05'}
+                    gutterBottom
+                  >
+                    {verificarStatusFatura(fatura.data_vencimento)}
+                  </Typography>
+                </Grid>
+                <Grid item xs={6} style={{ textAlign: 'right' }}>
+                  <Typography variant="caption" color={highlightColor || '#09DB05'}>
+                    Vencimento
+                  </Typography>
+                  <Typography variant="body2" color={highlightColor || '#09DB05'}>
+                    {formatarDataBR(fatura.data_vencimento)}
+                  </Typography>
+                </Grid>
+              </Grid>
+
               <Typography
                 variant="h4"
                 color={highlightColor || '#09DB05'}
                 sx={{ fontWeight: 'bold', textAlign: 'center', marginTop: '10px' }}
               >
-                R$ {proximaFatura.valor_aberto.toFixed(2).replace('.', ',')}
+                R$ {fatura.valor_aberto}
               </Typography>
 
-              {/* Botões de ação */}
               <Grid
                 container
                 spacing={2}
@@ -802,70 +678,115 @@ console.log("Outras Faturas:", outrasFaturas);
                 justifyContent="center"
                 sx={{ marginTop: '15px' }}
               >
-                {renderButton({
-                  icon: iconeEnviarUrl || 'https://i.ibb.co/4W2FynC/seta-para-cima.png',
-                  label: '2ª VIA',
-                  onClick: () => {
-                    setBoletoSelecionado(proximaFatura);
-                    setOpenConfirmModal(true);
-                  },
-                })}
-                {renderButton({
-                  icon: iconeBarrasUrl || 'https://i.ibb.co/MPcb9jn/codigo-de-barras.png',
-                  label: 'Baixar Boleto',
-                  onClick: () => {
-                    setBoletoSelecionado(proximaFatura);
-                    setOpenBoletoModal(true);
-                  },
-                })}
-                {renderButton({
-                  icon: iconePixUrl || 'https://i.ibb.co/xLxNTgn/codigo-qr.png',
-                  label: 'PAGAR COM PIX',
-                  onClick: () => {
-                    setBoletoSelecionado(proximaFatura);
-                    handleOpenModal(proximaFatura.id);
-                  },
-                })}
+                {/* Botões e funcionalidades da fatura */}
+                <Grid item xs={4} style={{ textAlign: 'center' }}>
+                  <Button
+                    variant="text"
+                    color={highlightColor || '#09DB05'}
+                    sx={{ fontSize: '10px', display: 'flex', flexDirection: 'column' }}
+                    onClick={() => {
+                      setBoletoSelecionado(fatura);
+                      setOpenConfirmModal(true);
+                    }}
+                  >
+                    <img
+                      src={iconeEnviarUrl || 'https://i.ibb.co/4W2FynC/seta-para-cima.png'}
+                      alt="Ícone Enviar"
+                      style={{ width: '24px' }}
+                    />
+                    <Typography
+                      variant="caption"
+                      color={highlightColor || '#09DB05'}
+                      sx={{ marginTop: '4px' }}
+                    >
+                      2ª VIA
+                    </Typography>
+                  </Button>
+                </Grid>
+
+                <Grid item xs={4} style={{ textAlign: 'center' }}>
+                  <Button
+                    variant="text"
+                    sx={{ color: 'black', fontSize: '10px', display: 'flex', flexDirection: 'column' }}
+                    onClick={() => {
+                      setBoletoSelecionado(fatura);
+                      setOpenBoletoModal(true);
+                    }}
+                  >
+                    <img
+                      src={iconeBarrasUrl || 'https://i.ibb.co/MPcb9jn/codigo-de-barras.png'}
+                      alt="icone-barras"
+                      style={{ width: '24px' }}
+                    />
+                    <Typography
+                      variant="caption"
+                      color={highlightColor || '#09DB05'}
+                      sx={{ marginTop: '4px' }}
+                    >
+                      Baixar Boleto
+                    </Typography>
+                  </Button>
+                </Grid>
+
+                <Grid item xs={4} style={{ textAlign: 'center' }}>
+                  <Button
+                    variant="text"
+                    sx={{ color: 'black', fontSize: '10px', display: 'flex', flexDirection: 'column' }}
+                    onClick={() => {
+                      setBoletoSelecionado(fatura);
+                      handleOpenModal(fatura.id);
+                    }}
+                  >
+                    <img
+                      src={iconePixUrl || 'https://i.ibb.co/xLxNTgn/codigo-qr.png'}
+                      alt="icone-pix"
+                      style={{ width: '24px' }}
+                    />
+                    <Typography
+                      variant="caption"
+                      color={highlightColor || '#09DB05'}
+                      sx={{ marginTop: '4px' }}
+                    >
+                      PAGAR COM PIX
+                    </Typography>
+                  </Button>
+                </Grid>
               </Grid>
             </Paper>
-          )}
+          ))
+        ) : null}
 
-
-
-          {/* Botão de desbloqueio de confiança */}
-          {outrasFaturas.length > 0 && verificarSeBloqueado(outrasFaturas[0]?.data_vencimento) && (
-            <Tooltip
-              title={textDesbloqueio || 'Desbloqueio de Confiança'}
-              open={showTooltip}
-              disableHoverListener
-              arrow
-              placement="top"
+        {/* Botão de desbloqueio de confiança */}
+        {outrasFaturas.length > 0 && verificarSeBloqueado(outrasFaturas[0].data_vencimento) && (
+          <Tooltip
+            title={textDesbloqueio}
+            open={showTooltip}
+            disableHoverListener
+            arrow
+            placement="top"
+          >
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => desbloqueioConfianca(idContrato)}
+              sx={{
+                position: 'fixed',
+                bottom: 80,
+                right: 20,
+                backgroundColor: primaryColor || '#09DB05',
+                color: highlightColor || '#FFF',
+                borderRadius: '50%',
+                minWidth: '50px',
+                minHeight: '50px',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+              }}
             >
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => desbloqueioConfianca(idContrato)}
-                sx={{
-                  position: 'fixed',
-                  bottom: 80,
-                  right: 20,
-                  backgroundColor: primaryColor || '#09DB05',
-                  color: highlightColor || '#FFF',
-                  borderRadius: '50%',
-                  minWidth: '50px',
-                  minHeight: '50px',
-                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-                }}
-              >
-                {iconsMap[iconOpenDesConfiança] || (
-                  <img src="URL_DO_ICONE_PADRAO" alt="Ícone de Desbloqueio de Confiança" />
-                )}
-              </Button>
-            </Tooltip>
-          )}
-
-
-        
+              {iconsMap[iconOpenDesConfiança] || (
+                <img src="URL_DO_ICONE_PADRAO" alt="Ícone de Desbloqueio de Confiança" />
+              )}
+            </Button>
+          </Tooltip>
+        )}
 
 
 
