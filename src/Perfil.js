@@ -61,7 +61,7 @@ const loadClientData = async () => {
     
     if (cpf) {
       // Faz a requisição para buscar os dados do cliente no arquivo JSON
-      const response = await fetch(`http://localhost:3002/buscarClienteNoArquivo/${cpf}`);
+      const response = await fetch(`api.virtelecom.nexusnerds.com.br/buscarClienteNoArquivo/${cpf}`);
       
       if (response.ok) {
         const data = await response.json();

@@ -104,45 +104,10 @@ useEffect(() => {
     }
   };
 
-  const handleMinhasFaturasClick = async () => {
-    const cpfCnpj = localStorage.getItem('cnpj_cpf'); // Obtém o CPF/CNPJ do localStorage
-  
-    if (cpfCnpj) {
-      try {
-        // Abrir o modal com a mensagem animada
-        setLoadingMessage('Aguarde... Carregando Dados Financeiros.');
-        setIsModalOpen(true);
-  
-        const response = await fetch('https://www.appmax.nexusnerds.com.br/buscar-cliente', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ cnpj_cpf: cpfCnpj }),
-        });
-  
-        if (!response.ok) {
-          throw new Error(`Erro: ${response.statusText}`);
-        }
-  
-        const data = await response.json();
-        console.log('Dados do cliente recebidos:', data);
-  
-        // Atualiza o localStorage com os dados recebidos
-        localStorage.setItem('dadosCliente2', JSON.stringify(data));
-  
-        // Navega para a página de financeiro
-        navigate('/MinhaFatura');
-      } catch (error) {
-        console.error('Erro ao buscar o cliente:', error.message);
-      } finally {
-        // Fecha o modal após a conclusão da solicitação
-        setIsModalOpen(false);
-      }
-    } else {
-      console.error('CPF/CNPJ não encontrado no localStorage.');
-    }
+  const handleMinhasFaturasClick = () => {
+    navigate('/financeiro');
   };
+  
   
 
   useEffect(() => {
