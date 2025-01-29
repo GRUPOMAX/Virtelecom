@@ -1,0 +1,43 @@
+{
+  "files": {
+    "main.css": "/Virtelecom/static/css/main.f5437295.css",
+    "main.js": "/Virtelecom/static/js/main.fbecce73.js",
+    "reactPlayerYouTube.js": "/Virtelecom/static/js/reactPlayerYouTube.0f9c4465.chunk.js",
+    "reactPlayerSoundCloud.js": "/Virtelecom/static/js/reactPlayerSoundCloud.91e666f0.chunk.js",
+    "reactPlayerVimeo.js": "/Virtelecom/static/js/reactPlayerVimeo.f20458f9.chunk.js",
+    "reactPlayerMux.js": "/Virtelecom/static/js/reactPlayerMux.a508d54c.chunk.js",
+    "reactPlayerFacebook.js": "/Virtelecom/static/js/reactPlayerFacebook.6e17f79c.chunk.js",
+    "reactPlayerStreamable.js": "/Virtelecom/static/js/reactPlayerStreamable.a8e2f8f9.chunk.js",
+    "reactPlayerWistia.js": "/Virtelecom/static/js/reactPlayerWistia.8e113a93.chunk.js",
+    "reactPlayerTwitch.js": "/Virtelecom/static/js/reactPlayerTwitch.c06151da.chunk.js",
+    "reactPlayerDailyMotion.js": "/Virtelecom/static/js/reactPlayerDailyMotion.a710f802.chunk.js",
+    "reactPlayerMixcloud.js": "/Virtelecom/static/js/reactPlayerMixcloud.899e47ec.chunk.js",
+    "reactPlayerVidyard.js": "/Virtelecom/static/js/reactPlayerVidyard.09982c46.chunk.js",
+    "reactPlayerKaltura.js": "/Virtelecom/static/js/reactPlayerKaltura.29bd722e.chunk.js",
+    "reactPlayerFilePlayer.js": "/Virtelecom/static/js/reactPlayerFilePlayer.c952c7f6.chunk.js",
+    "reactPlayerPreview.js": "/Virtelecom/static/js/reactPlayerPreview.c979686a.chunk.js",
+    "static/js/453.6db14a0e.chunk.js": "/Virtelecom/static/js/453.6db14a0e.chunk.js",
+    "index.html": "/Virtelecom/index.html",
+    "main.f5437295.css.map": "/Virtelecom/static/css/main.f5437295.css.map",
+    "main.fbecce73.js.map": "/Virtelecom/static/js/main.fbecce73.js.map",
+    "reactPlayerYouTube.0f9c4465.chunk.js.map": "/Virtelecom/static/js/reactPlayerYouTube.0f9c4465.chunk.js.map",
+    "reactPlayerSoundCloud.91e666f0.chunk.js.map": "/Virtelecom/static/js/reactPlayerSoundCloud.91e666f0.chunk.js.map",
+    "reactPlayerVimeo.f20458f9.chunk.js.map": "/Virtelecom/static/js/reactPlayerVimeo.f20458f9.chunk.js.map",
+    "reactPlayerMux.a508d54c.chunk.js.map": "/Virtelecom/static/js/reactPlayerMux.a508d54c.chunk.js.map",
+    "reactPlayerFacebook.6e17f79c.chunk.js.map": "/Virtelecom/static/js/reactPlayerFacebook.6e17f79c.chunk.js.map",
+    "reactPlayerStreamable.a8e2f8f9.chunk.js.map": "/Virtelecom/static/js/reactPlayerStreamable.a8e2f8f9.chunk.js.map",
+    "reactPlayerWistia.8e113a93.chunk.js.map": "/Virtelecom/static/js/reactPlayerWistia.8e113a93.chunk.js.map",
+    "reactPlayerTwitch.c06151da.chunk.js.map": "/Virtelecom/static/js/reactPlayerTwitch.c06151da.chunk.js.map",
+    "reactPlayerDailyMotion.a710f802.chunk.js.map": "/Virtelecom/static/js/reactPlayerDailyMotion.a710f802.chunk.js.map",
+    "reactPlayerMixcloud.899e47ec.chunk.js.map": "/Virtelecom/static/js/reactPlayerMixcloud.899e47ec.chunk.js.map",
+    "reactPlayerVidyard.09982c46.chunk.js.map": "/Virtelecom/static/js/reactPlayerVidyard.09982c46.chunk.js.map",
+    "reactPlayerKaltura.29bd722e.chunk.js.map": "/Virtelecom/static/js/reactPlayerKaltura.29bd722e.chunk.js.map",
+    "reactPlayerFilePlayer.c952c7f6.chunk.js.map": "/Virtelecom/static/js/reactPlayerFilePlayer.c952c7f6.chunk.js.map",
+    "reactPlayerPreview.c979686a.chunk.js.map": "/Virtelecom/static/js/reactPlayerPreview.c979686a.chunk.js.map",
+    "453.6db14a0e.chunk.js.map": "/Virtelecom/static/js/453.6db14a0e.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f5437295.css",
+    "static/js/main.fbecce73.js"
+  ]
+}
