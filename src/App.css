@@ -234,7 +234,14 @@ header {
 }
 
 
-
+.css-1ijkfjr {
+  width: 86%;
+  margin-left: auto;
+  box-sizing: border-box;
+  margin-right: auto;
+  padding-left: 16px;
+  padding-right: 16px;
+}
 
 .fatura-box h6 {
   font-size: 18px;
