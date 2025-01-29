@@ -233,12 +233,11 @@ header {
   z-index: 0; /* Mantém o Swiper funcional */
 }
 
-
-.css-1ijkfjr {
+.login-container {
   width: 86%;
   margin-left: auto;
-  box-sizing: border-box;
   margin-right: auto;
+  box-sizing: border-box;
   padding-left: 16px;
   padding-right: 16px;
 }
