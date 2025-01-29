@@ -66,7 +66,7 @@ const buscarCliente = async (cpfCnpj) => {
 
   // Função para buscar as configurações de cores e aplicar
   const fetchAppSettings = async () => {
-    const colorsTableId = 'mn37trxp7ai1efw'; // ID da tabela de cores no NocoDB
+    const colorsTableId = 'mi4m06fy7w1u5h2'; // ID da tabela de cores no NocoDB
     const token = 'ZqFzoCRvPCyzSRAIKPMbnOaLwR6laivSdxcpXiA5'; // Token de autenticação
 
     try {
@@ -97,7 +97,7 @@ const buscarCliente = async (cpfCnpj) => {
 
   // Função para buscar os módulos do footer dinamicamente
   const fetchFooterModules = async () => {
-    const footerTableId = 'msafdyz6sew21f1'; // ID da tabela do footer no NocoDB
+    const footerTableId = 'm214oke6rh5dca0'; // ID da tabela do footer no NocoDB
     const token = 'ZqFzoCRvPCyzSRAIKPMbnOaLwR6laivSdxcpXiA5'; // Token de autenticação
 
     try {
@@ -130,7 +130,7 @@ const buscarCliente = async (cpfCnpj) => {
   };
   useEffect(() => {
     const fetchAppSettings = async () => {
-      const colorsTableId = 'mn37trxp7ai1efw';
+      const colorsTableId = 'mi4m06fy7w1u5h2';
       const token = 'ZqFzoCRvPCyzSRAIKPMbnOaLwR6laivSdxcpXiA5';
   
       // Verifique se as configurações de cores já estão no localStorage

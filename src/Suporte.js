@@ -92,8 +92,8 @@ function Suporte() {
 
 // Função para buscar a cor primária e ícones do NocoDB
 useEffect(() => {
-  const colorsTableId = 'mn37trxp7ai1efw'; // Nova tabela de cores
-  const iconsTableId = 'm27t8z8ht25mplj'; // Nova tabela de ícones
+  const colorsTableId = 'mi4m06fy7w1u5h2'; // Nova tabela de cores
+  const iconsTableId = 'mio2lr97vak735b'; // Nova tabela de ícones
   const token = 'ZqFzoCRvPCyzSRAIKPMbnOaLwR6laivSdxcpXiA5'; // Substitua pelo token correto
 
   const fetchPrimaryColorAndIcons = async () => {

@@ -29,8 +29,8 @@ function App() {
   const [modulosPermitidos, setModulosPermitidos] = useState([]); // Estado para armazenar os módulos permitidos
 
   // Define the table IDs for modules
-  const modulesTableId = 'msafdyz6sew21f1'; // Tabela de módulos
-  const colorsTableId = 'mn37trxp7ai1efw'; // Nova tabela de cores
+  const modulesTableId = 'm214oke6rh5dca0'; // Tabela de módulos
+  const colorsTableId = 'mi4m06fy7w1u5h2'; // Nova tabela de cores
   const token = 'ZqFzoCRvPCyzSRAIKPMbnOaLwR6laivSdxcpXiA5'; // Token de autenticação
   const baseUrl = 'https://nocodb.nexusnerds.com.br/api/v2/tables/'; // URL base
 

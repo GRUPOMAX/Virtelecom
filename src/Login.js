@@ -41,10 +41,10 @@ function Login({ onLogin }) {
   };
 
   // Define the table IDs for colors, icons, logo and background, and animation
-  const colorsTableId = 'mn37trxp7ai1efw'; // Nova tabela de cores
-  const iconsTableId = 'm27t8z8ht25mplj'; // Nova tabela de ícones
-  const logoBackgroundTableId = 'm44x9fhvp92huzq'; // Tabela de logo e background
-  const animationTableId = 'm6rxa4obt0cl3b9'; // Tabela de animação
+  const colorsTableId = 'mi4m06fy7w1u5h2'; // Nova tabela de cores
+  const iconsTableId = 'mio2lr97vak735b'; // Nova tabela de ícones
+  const logoBackgroundTableId = 'm9ijo50nt4m9wpk'; // Tabela de logo e background
+  const animationTableId = 'mm2nyv7vqk2jue1'; // Tabela de animação
   const token = 'ZqFzoCRvPCyzSRAIKPMbnOaLwR6laivSdxcpXiA5'; // Token de autenticação
   
 

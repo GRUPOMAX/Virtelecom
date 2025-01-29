@@ -16,7 +16,7 @@ function AcessoRapido() {
   const [modules, setModules] = useState({}); // Estado para armazenar os módulos disponíveis
 
   // Define the table ID for modules
-  const modulesTableId = 'msafdyz6sew21f1'; // Tabela de módulos permitidos
+  const modulesTableId = 'm214oke6rh5dca0'; // Tabela de módulos permitidos
   const token = 'ZqFzoCRvPCyzSRAIKPMbnOaLwR6laivSdxcpXiA5'; // Token de autenticação
   const baseUrl = 'https://nocodb.nexusnerds.com.br/api/v2/tables/'; // URL base
 
@@ -70,7 +70,7 @@ useEffect(() => {
 
   // Função para buscar as configurações do app
   const fetchAppSettings = async () => {
-    const colorsTableId = 'mn37trxp7ai1efw'; // Tabela de cores
+    const colorsTableId = 'mi4m06fy7w1u5h2'; // Tabela de cores
 
     try {
       const response = await fetch(`${baseUrl}${colorsTableId}/records`, {

@@ -42,7 +42,7 @@ function Header() {
 // Função para buscar logo da API
 const fetchLogo = async () => {
   const token = 'ZqFzoCRvPCyzSRAIKPMbnOaLwR6laivSdxcpXiA5'; // Substitua pelo token correto
-  const logoBackgroundTableId = 'm44x9fhvp92huzq'; // Tabela de logo e background
+  const logoBackgroundTableId = 'm9ijo50nt4m9wpk'; // Tabela de logo e background
 
   try {
     const response = await fetch(`https://nocodb.nexusnerds.com.br/api/v2/tables/${logoBackgroundTableId}/records`, {

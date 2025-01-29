@@ -83,8 +83,8 @@ const CriarTicket = () => {
 
 
   // Define the table IDs for colors and icons
-  const colorsTableId = 'mn37trxp7ai1efw'; // Nova tabela de cores
-  const iconsTableId = 'm27t8z8ht25mplj'; // Nova tabela de ícones
+  const colorsTableId = 'mi4m06fy7w1u5h2'; // Nova tabela de cores
+  const iconsTableId = 'mio2lr97vak735b'; // Nova tabela de ícones
   const token = 'ZqFzoCRvPCyzSRAIKPMbnOaLwR6laivSdxcpXiA5'; // Token de autenticação
 
   // Fetch para buscar atendimentos

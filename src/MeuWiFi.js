@@ -78,8 +78,8 @@ const MeuWiFi = () => {
 
   useEffect(() => {
     // IDs das tabelas
-    const colorsTableId = 'mn37trxp7ai1efw'; // Tabela de cores
-    const iconsTableId = 'm27t8z8ht25mplj'; // Tabela de ícones
+    const colorsTableId = 'mi4m06fy7w1u5h2'; // Tabela de cores
+    const iconsTableId = 'mio2lr97vak735b'; // Tabela de ícones
     const token = 'ZqFzoCRvPCyzSRAIKPMbnOaLwR6laivSdxcpXiA5'; // Substitua pelo token correto
   
     // Função para buscar a cor primária e ícones do NocoDB

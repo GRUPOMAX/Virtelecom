@@ -19,9 +19,9 @@ function Home({ dadosCliente }) {
   const [muiIconColor, setMuiIconColor] = useState('#FFFFFF'); // Cor padrão
   const [textMuiColor, setTextMuiColor] = useState('#FFFFFF'); // Cor padrão
 
-  const colorsTableId = 'mn37trxp7ai1efw'; // Tabela de cores
+  const colorsTableId = 'mi4m06fy7w1u5h2'; // Tabela de cores
   const token = 'ZqFzoCRvPCyzSRAIKPMbnOaLwR6laivSdxcpXiA5';
-  const modulesTableId = 'msafdyz6sew21f1';
+  const modulesTableId = 'm214oke6rh5dca0';
   const baseUrl = 'https://nocodb.nexusnerds.com.br/api/v2/tables/';
 
   // Função para buscar os módulos disponíveis

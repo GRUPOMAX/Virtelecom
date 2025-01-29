@@ -12,7 +12,7 @@ function Novidades() {
   const [buttonBorderColor, setButtonBorderColor] = useState('#28a745'); // Cor padrão da borda do botão
   const [open, setOpen] = useState(false);
 
-  const tableId = 'mx9lt74bv3o9ahg'; // ID da tabela de Novidades no NocoDB
+  const tableId = 'm2hcpzb84rtp0ou'; // ID da tabela de Novidades no NocoDB
   const token = 'ZqFzoCRvPCyzSRAIKPMbnOaLwR6laivSdxcpXiA5'; // Token de autenticação
   const baseUrl = 'https://nocodb.nexusnerds.com.br/api/v2/tables/'; // URL base do NocoDB
 

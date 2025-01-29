@@ -139,9 +139,9 @@ function Financeiro({ dados }) {
 
   useEffect(() => {
     // IDs das tabelas
-    const colorsTableId = 'mn37trxp7ai1efw'; // Tabela de cores
-    const iconsTableId = 'm27t8z8ht25mplj'; // Tabela de ícones
-    const backgroundTableId = 'mxdf4nqxh5m7ewx'; // Tabela de backgrounds
+    const colorsTableId = 'mi4m06fy7w1u5h2'; // Tabela de cores
+    const iconsTableId = 'mio2lr97vak735b'; // Tabela de ícones
+    const backgroundTableId = 'mvs9ovu9gjjgtiq'; // Tabela de backgrounds
   
     const token = 'ZqFzoCRvPCyzSRAIKPMbnOaLwR6laivSdxcpXiA5'; // Substitua pelo token correto
   
@@ -266,7 +266,7 @@ function Financeiro({ dados }) {
 
   // Função para buscar o ícone diretamente da API
   useEffect(() => {
-    const iconsTableId = 'm27t8z8ht25mplj'; // ID da tabela de ícones
+    const iconsTableId = 'mio2lr97vak735b'; // ID da tabela de ícones
     const token = 'ZqFzoCRvPCyzSRAIKPMbnOaLwR6laivSdxcpXiA5';
 
     const fetchIcon = async () => {

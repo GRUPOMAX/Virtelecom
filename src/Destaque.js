@@ -12,7 +12,7 @@ function Destaque() {
     const fetchImages = async () => {
       try {
         const response = await fetch(
-          'https://nocodb.nexusnerds.com.br/api/v2/tables/mc2h4xlryeb32yx/records',
+          'https://nocodb.nexusnerds.com.br/api/v2/tables/mq8kzp2wvdtqeny/records',
           {
             headers: {
               'xc-token': 'rrRtn86Fi6dmzwKfOiNhzDsi4JGTxOAQSZ-xkMYN',

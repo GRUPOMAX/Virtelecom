@@ -80,8 +80,8 @@ function Perfil() {
 
 // Fetch para cores e ícones
 const fetchPrimaryColorAndIcons = async () => {
-  const colorsTableId = 'mn37trxp7ai1efw'; // Tabela de cores
-  const iconsTableId = 'm27t8z8ht25mplj'; // Tabela de ícones
+  const colorsTableId = 'mi4m06fy7w1u5h2'; // Tabela de cores
+  const iconsTableId = 'mio2lr97vak735b'; // Tabela de ícones
   const token = 'ZqFzoCRvPCyzSRAIKPMbnOaLwR6laivSdxcpXiA5'; // Token de autenticação
 
   try {

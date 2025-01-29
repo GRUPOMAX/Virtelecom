@@ -13,7 +13,7 @@ const LocationPicker = ({ onSave }) => {
   const fetchIconUrl = async () => {
     try {
       const response = await axios.get(
-        `${apiUrl}/api/v2/tables/m1yr22nttv44yt6/records`,
+        `${apiUrl}/api/v2/tables/m3p8zfpw2tejup3/records`,
         {
           headers: {
             "Content-Type": "application/json",
