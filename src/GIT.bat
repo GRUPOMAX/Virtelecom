@@ -1,7 +1,7 @@
 @echo off
 
 REM Muda para o diretório do repositório
-cd "C:\Users\Joao\Documents\APLICATIVO CELULAR\APP-MAX"
+cd "C:\Users\Joao\Documents\APP VIR TELECOM\APP-VIRTELECOM"
 
 REM Verifica se há alterações não comitadas
 git diff --quiet && git diff --cached --quiet
@@ -26,7 +26,7 @@ git push
 echo Alterações enviadas com sucesso!
 
 REM Navega até o diretório src
-cd "C:\Users\Joao\Documents\APLICATIVO CELULAR\APP-MAX\src"
+cd "C:\Users\Joao\Documents\APP VIR TELECOM\APP-VIRTELECOM\src"
 
 REM Executa o comando npm run deploy
 npm run deploy
