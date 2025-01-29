@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/Virtelecom/static/css/main.f5437295.css",
+    "main.css": "/Virtelecom/static/css/main.218892a1.css",
     "main.js": "/Virtelecom/static/js/main.f8893973.js",
     "reactPlayerYouTube.js": "/Virtelecom/static/js/reactPlayerYouTube.0f9c4465.chunk.js",
     "reactPlayerSoundCloud.js": "/Virtelecom/static/js/reactPlayerSoundCloud.91e666f0.chunk.js",
@@ -18,7 +18,7 @@
     "reactPlayerPreview.js": "/Virtelecom/static/js/reactPlayerPreview.c979686a.chunk.js",
     "static/js/453.6db14a0e.chunk.js": "/Virtelecom/static/js/453.6db14a0e.chunk.js",
     "index.html": "/Virtelecom/index.html",
-    "main.f5437295.css.map": "/Virtelecom/static/css/main.f5437295.css.map",
+    "main.218892a1.css.map": "/Virtelecom/static/css/main.218892a1.css.map",
     "main.f8893973.js.map": "/Virtelecom/static/js/main.f8893973.js.map",
     "reactPlayerYouTube.0f9c4465.chunk.js.map": "/Virtelecom/static/js/reactPlayerYouTube.0f9c4465.chunk.js.map",
     "reactPlayerSoundCloud.91e666f0.chunk.js.map": "/Virtelecom/static/js/reactPlayerSoundCloud.91e666f0.chunk.js.map",
@@ -37,7 +37,7 @@
     "453.6db14a0e.chunk.js.map": "/Virtelecom/static/js/453.6db14a0e.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.f5437295.css",
+    "static/css/main.218892a1.css",
     "static/js/main.f8893973.js"
   ]
 }
