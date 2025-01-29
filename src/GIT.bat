@@ -1,7 +1,16 @@
 @echo off
+setlocal enabledelayedexpansion
 
 REM Muda para o diretório do repositório
 cd "C:\Users\Joao\Documents\APP VIR TELECOM\APP-VIRTELECOM"
+
+REM Pergunta se o usuário deseja modificar a URL do repositório
+set /p change_url="Deseja modificar a URL do repositório remoto? (S/N): "
+if /I "%change_url%"=="S" (
+    set /p new_url="Digite a nova URL do repositório remoto: "
+    git remote set-url origin %new_url%
+    echo URL do repositório alterada para %new_url%.
+)
 
 REM Verifica se há alterações não comitadas
 git diff --quiet && git diff --cached --quiet
