@@ -3,8 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Box, TextField, Typography, Grid, Paper } from '@mui/material';
 
 function Perfil() {
-  const [latitude, setLatitude] = useState('');
-  const [longitude, setLongitude] = useState('');
+  // Definindo os estados para os campos do formulário
   const [nome, setNome] = useState('');
   const [cpfCnpj, setCpfCnpj] = useState('');
   const [telefoneCelular, setTelefoneCelular] = useState('');
@@ -13,9 +12,9 @@ function Perfil() {
   const [endereco, setEndereco] = useState('');
   const [bairro, setBairro] = useState('');
   const [complemento, setComplemento] = useState('');
-  const [cidade, setCidade] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
   const [email, setEmail] = useState('');
+  const [cidade, setCidade] = useState('');
   const [secudaryColor, setsecudaryColor] = useState(''); // Adicionando estado para a cor secundária
   const [highlightColor, setHighlightColor] = useState(''); // Adicionando estado para a cor de destaque
   const [buttonColor, setButtonColor] = useState(''); // Adicionando estado para a cor do botão
@@ -25,58 +24,77 @@ function Perfil() {
 
   const mapRef = useRef(null);
 
-  // Carregar os dados do cliente do localStorage
-  const loadClientData = () => {
-    const storedData = localStorage.getItem('dadosCliente');
-    if (storedData) {
-      try {
-        const dadosCliente = JSON.parse(storedData);
-        console.log('Dados Cliente:', dadosCliente);
 
-        const idCliente = dadosCliente?.id_cliente;
+// Função para processar os dados e ajustar conforme necessário
+const processarDadosCliente = (data) => {
+  const contratos = data.contratos || [];
+  const cliente = data.cliente || {};
 
-        // Preencher os estados com os valores recebidos
-        if (dadosCliente) {
-          setNome(dadosCliente.razao_social_nome || '');
-          setCpfCnpj(dadosCliente.cnpj_cpf || '');
-          setTelefoneCelular(dadosCliente.telefone_celular || '');
-          setCep(dadosCliente.cep || '');
-          setNumero(dadosCliente.numero || '');
-          setEndereco(dadosCliente.endereco || '');
-          setBairro(dadosCliente.bairro || '');
-          setComplemento(dadosCliente.complemento || '');
-          setWhatsapp(dadosCliente.whatsapp || '');
-          setEmail(dadosCliente.email || '');
-          const cidade = dadosCliente.cidade === '3169' ? 'Viana' : (dadosCliente.cidade || '');
-          setCidade(cidade);
+  if (contratos.length === 0) return {};
 
-          // Buscar a localização da ONU com base no ID do cliente
-          if (idCliente) {
-            fetchLocalizacaoOnu(idCliente);
-          } else {
-            console.error('ID do cliente não encontrado.');
-          }
-        }
-      } catch (error) {
-        console.error('Erro ao carregar os dados do cliente do localStorage:', error);
-      }
-    }
+  const contrato = contratos[0]; // Pegamos o primeiro contrato ativo
+  const endereco = contrato.endereco.split(',');
+
+  // Pega o CPF ou CNPJ diretamente do localStorage
+  const cnpjCpf = localStorage.getItem('cnpj_cpf') || '';
+
+  return {
+    razao_social: cliente.razaosocial || '',  // Ajusta para o nome do cliente
+    cnpj_cpf: cnpjCpf,  // Agora pega o valor diretamente do localStorage
+    cep: endereco[endereco.length - 1]?.trim() || '',  // Pegamos o último campo que seria o CEP
+    numero: endereco[1]?.split('-')[0]?.trim() || '',  // Pegamos o número da casa
+    endereco: endereco.slice(0, 2).join(',').trim(),  // Junta a rua e o bairro
+    bairro: endereco[2]?.trim() || '',
+    complemento: endereco[3]?.trim() || '',
+    cidade: endereco[4]?.split('/')[0]?.trim() || '',  // Ajuste o nome da cidade
+    whatsapp: cliente.telefone?.replace(/[^\d]+/g, '') || '',  // Ajusta para o telefone do cliente sem máscara
+    email: cliente.email || '',  // Ajusta para o email do cliente
+    telefone_celular: cliente.telefone || ''  // Ajusta para o telefone celular do cliente
   };
+};
 
-  const fetchLocalizacaoOnu = async (idCliente) => {
-    try {
-      const response = await fetch(`https://www.db.app.nexusnerds.com.br/buscar-localizacao-onu?id_cliente=${idCliente}`);
+// Função para carregar os dados do cliente
+const loadClientData = async () => {
+  try {
+    // Obtém o CPF diretamente do localStorage
+    const cpf = localStorage.getItem('cnpj_cpf');
+    
+    if (cpf) {
+      // Faz a requisição para buscar os dados do cliente no arquivo JSON
+      const response = await fetch(`http://localhost:3002/buscarClienteNoArquivo/${cpf}`);
+      
       if (response.ok) {
         const data = await response.json();
-        setLatitude(data.latitude);
-        setLongitude(data.longitude);
+        console.log('Dados do cliente encontrados no arquivo JSON:', data);
+
+        // Processar os dados do cliente para o formato desejado
+        const dadosCliente = processarDadosCliente(data);
+
+        // Preencher os estados com os valores processados
+        setNome(dadosCliente.razao_social || '');
+        setCpfCnpj(dadosCliente.cnpj_cpf || '');
+        setTelefoneCelular(dadosCliente.telefone_celular || '');
+        setCep(dadosCliente.cep || '');
+        setNumero(dadosCliente.numero || '');
+        setEndereco(dadosCliente.endereco || '');
+        setBairro(dadosCliente.bairro || '');
+        setComplemento(dadosCliente.complemento || '');
+        setWhatsapp(dadosCliente.whatsapp || '');
+        setEmail(dadosCliente.email || '');
+        setCidade(dadosCliente.cidade || '');
       } else {
-        console.error('Erro ao buscar a localização da ONU:', response.statusText);
+        const errorData = await response.json();
+        console.warn(errorData.error || 'Erro ao buscar dados do cliente.');
       }
-    } catch (error) {
-      console.error('Erro ao buscar a localização da ONU:', error);
+    } else {
+      console.warn('CPF não encontrado no localStorage.');
     }
-  };
+  } catch (error) {
+    console.error('Erro ao carregar os dados do cliente:', error);
+  }
+};
+
+
 
 // Fetch para cores e ícones
 const fetchPrimaryColorAndIcons = async () => {
@@ -157,39 +175,6 @@ const fetchPrimaryColorAndIcons = async () => {
     return () => clearInterval(intervalId);
   }, []);
 
-
-  // Inicializa o mapa com o marcador usando latitude e longitude
-  useEffect(() => {
-    if (latitude && longitude && mapRef.current) {
-      const lat = parseFloat(latitude);
-      const lng = parseFloat(longitude);
-
-      const map = new google.maps.Map(mapRef.current, {
-        center: { lat, lng },
-        zoom: 19,
-        disableDefaultUI: true, // Remove todos os controles padrão
-        mapTypeId: 'hybrid', // Alterar para 'roadmap', 'hybrid', ou 'terrain' conforme necessário
-        zoomControl: false,
-        mapTypeControl: false,
-        scaleControl: false,
-        streetViewControl: false,
-        rotateControl: false,
-        fullscreenControl: false,
-        minZoom: 23, // Define o nível mínimo de zoom permitido
-        maxZoom: 23, // Define o nível máximo de zoom permitido
-        gestureHandling: 'none', // Desativa zoom via scroll e gestos
-      });
-
-      new google.maps.Marker({
-        position: { lat, lng },
-        map,
-        icon: {
-          url: iconCasaConectadaUrl,
-          scaledSize: new google.maps.Size(40, 40), // Tamanho do ícone
-        },
-      });
-    }
-  }, [latitude, longitude, iconCasaConectadaUrl]);
 
   return (
     <Box sx={{ padding: '20px', minHeight: '100vh', boxSizing: 'border-box', overflowY: 'auto' }}>
@@ -439,17 +424,6 @@ const fetchPrimaryColorAndIcons = async () => {
               },
             }}
           />
-        </Grid>
-
-        {/* Seção do Mapa */}
-        <Grid item xs={12}>
-          <Typography variant="h6" sx={{ marginBottom: '5px' }}>
-            Localização:
-          </Typography>
-          <Paper sx={{ height: '210px', backgroundColor: '#e0e0e0', overflow: 'hidden', borderRadius: '10px' }}>
-            {/* Div para o mapa */}
-            <div ref={mapRef} style={{ width: '100%', height: '100%', borderRadius: '10px' }}></div>
-          </Paper>
         </Grid>
       </Grid>
     </Box>

@@ -175,64 +175,57 @@ function Login({ onLogin }) {
       return;
     }
   
-    const headers = new Headers();
-    headers.append("Cache-Control", "no-cache, no-store, must-revalidate");
-    headers.append("Pragma", "no-cache");
-    headers.append("Expires", "0");
-    headers.append("Content-Type", "application/json");
-  
     try {
-      // Verifica se o cliente já existe no banco de dados
-      const response = await fetch('https://www.db.app.nexusnerds.com.br/buscar-cliente', {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify({ cnpj_cpf: documentoFormatado }),
-      });
+      // Faz a requisição para a API local, que vai buscar e salvar os dados no JSON
+      const response = await fetch(`http://localhost:3002/buscarCliente/${documentoFormatado}`);
   
       if (response.ok) {
-        // Cliente encontrado, fazer login
         const data = await response.json();
   
+        // Salva os dados do cliente no localStorage
         localStorage.setItem('cnpj_cpf', documentoFormatado);
         localStorage.setItem('dadosCliente', JSON.stringify(data));
-        setClienteInfo(data);
-        console.log("Cliente encontrado, fazendo login:", data);
-  
-        onLogin(data);
-        navigate('/home');
-      } else {
-        // Cliente não encontrado, cadastrar o cliente
-        console.log("Cliente não encontrado, cadastrando novo cliente...");
-  
-        const cadastroResponse = await fetch('https://www.db.app.nexusnerds.com.br/cadastrar-cliente', {
-          method: 'POST',
-          headers: headers,
-          body: JSON.stringify({ cnpj_cpf: documentoFormatado }),
+        
+        // Verifica se os dados foram salvos corretamente
+        console.log("Dados salvos no localStorage:", {
+          cnpj_cpf: documentoFormatado,
+          dadosCliente: data
         });
   
-        if (cadastroResponse.ok) {
-          const novoCliente = await cadastroResponse.json();
-          console.log("Novo cliente cadastrado:", novoCliente);
+        setClienteInfo(data);
   
-          localStorage.setItem('cnpj_cpf', documentoFormatado);
-          localStorage.setItem('dadosCliente', JSON.stringify(novoCliente));
-          setClienteInfo(novoCliente);
+        console.log("Dados do cliente recebidos:", data);
   
-          onLogin(novoCliente);
+        // Agora, vamos buscar no arquivo JSON o que foi salvo
+        const jsonResponse = await fetch(`http://localhost:3002/buscarClienteNoArquivo/${documentoFormatado}`);
+        
+        if (jsonResponse.ok) {
+          const jsonData = await jsonResponse.json();
+          console.log("Dados do cliente do arquivo JSON:", jsonData);
+  
+          // Passa os dados para o login
+          onLogin(jsonData);
           navigate('/home');
         } else {
-          const errorCadastro = await cadastroResponse.json();
-          setErro(errorCadastro.message || 'Erro ao cadastrar novo cliente.');
+          const errorData = await jsonResponse.json();
+          setErro(errorData.error || 'Erro ao buscar dados do cliente no arquivo JSON.');
         }
+  
+      } else {
+        const errorData = await response.json();
+        setErro(errorData.error || 'Erro ao buscar dados do cliente.');
       }
     } catch (error) {
-      console.error('Erro ao verificar ou cadastrar o cliente:', error.message);
-      setErro(`Erro ao verificar ou cadastrar o cliente: ${error.message}`);
+      console.error('Erro ao buscar os dados do cliente:', error.message);
+      setErro(`Erro ao buscar os dados do cliente: ${error.message}`);
     } finally {
       setLoading(false);
       setIsModalOpen(false); // Fecha o modal após o processamento
     }
   };
+  
+  
+  
   
 
 
