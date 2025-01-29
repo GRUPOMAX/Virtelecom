@@ -41,17 +41,17 @@
   padding: 30px; /* Aumenta o padding para mais espaço interno */
   border-radius: 10px;
   width: 100%;
-  max-width: 400px; /* Aumenta a largura máxima do container */
+  max-width: 300px; /* Aumenta a largura máxima do container */
 }
 
 .login-container {
-	width: 86%;
-	margin-left: auto;
-	margin-right: auto;
-	box-sizing: border-box;
-	padding-left: 16px;
-	padding-right: 16px;
-  }
+  width: 86%;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+  padding-left: 16px;
+  padding-right: 16px;
+}
 
 
 .login-input {
