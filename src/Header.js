@@ -29,7 +29,7 @@ function Header() {
         const cpf = localStorage.getItem('cnpj_cpf');
         if (cpf) {
           // Faz a requisição para buscar os dados do cliente no arquivo JSON
-          const response = await fetch(`api.virtelecom.nexusnerds.com.br/buscarClienteNoArquivo/${cpf}`);
+          const response = await fetch(`https://api.virtelecom.nexusnerds.com.br/buscarClienteNoArquivo/${cpf}`);
           if (response.ok) {
             const data = await response.json();
             setDadosCliente(data); // Carregar os dados do cliente

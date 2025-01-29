@@ -177,7 +177,7 @@ function Login({ onLogin }) {
   
     try {
       // Faz a requisição para a API local, que vai buscar e salvar os dados no JSON
-      const response = await fetch(`api.virtelecom.nexusnerds.com.br/buscarCliente/${documentoFormatado}`);
+      const response = await fetch(`https://api.virtelecom.nexusnerds.com.br/buscarCliente/${documentoFormatado}`);
   
       if (response.ok) {
         const data = await response.json();
@@ -197,7 +197,7 @@ function Login({ onLogin }) {
         console.log("Dados do cliente recebidos:", data);
   
         // Agora, vamos buscar no arquivo JSON o que foi salvo
-        const jsonResponse = await fetch(`api.virtelecom.nexusnerds.com.br/buscarClienteNoArquivo/${documentoFormatado}`);
+        const jsonResponse = await fetch(`https://api.virtelecom.nexusnerds.com.br/buscarClienteNoArquivo/${documentoFormatado}`);
         
         if (jsonResponse.ok) {
           const jsonData = await jsonResponse.json();

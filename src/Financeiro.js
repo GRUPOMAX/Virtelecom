@@ -336,7 +336,7 @@ function Financeiro({ dados }) {
   
   const loadClientData = async () => {
     try {
-      const response = await fetch('api.virtelecom.nexusnerds.com.br/buscarClienteNoArquivo/');
+      const response = await fetch('https://api.virtelecom.nexusnerds.com.br/buscarClienteNoArquivo/');
       const data = await response.json();
   
       if (data.cliente) {
@@ -426,7 +426,7 @@ const formatarDataBR = (data) => {
   const handleOpenModal = async (pixLink) => {
     try {
       const encodedLink = encodeURIComponent(pixLink);  // Codifica a URL
-      const response = await fetch(`api.virtelecom.nexusnerds.com.br/get-pix-code?link=${encodedLink}`);
+      const response = await fetch(`https://api.virtelecom.nexusnerds.com.br/get-pix-code?link=${encodedLink}`);
       const data = await response.json();
   
       if (data.pixCode) {
@@ -465,7 +465,7 @@ const copyToClipboard = () => {
   const fetchBoletoData = async (boletoLink) => {
     try {
       const encodedLink = encodeURIComponent(boletoLink);  // Codifica a URL
-      const response = await fetch(`api.virtelecom.nexusnerds.com.br/get-boleto-code?link=${encodedLink}`);
+      const response = await fetch(`https://api.virtelecom.nexusnerds.com.br/get-boleto-code?link=${encodedLink}`);
       const data = await response.json();
 
       if (data && data.boletoCode) {
